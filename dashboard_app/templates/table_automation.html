@@ -1,0 +1,99 @@
+{% extends 'Index.html' %}
+{% load static %}
+{% block table_automation %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Automation Data</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+
+        <a href="{% url 'Insert_automation_data' %}" class="btn btn-primary">Add Entry</a>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 order-1">
+                        <div class="card">
+                            <h5 class="card-header">Automation Report</h5>
+                            <div class="table-responsive text-nowrap">
+
+                                <table class="table">
+                                    <thead>
+                                        <tr class="text-nowrap">
+                                                <th>serialnumber</th>
+												<th>month</th>
+												<th>year</th>
+												<th>portfolio</th>
+												<th>AIT_Number</th>
+												<th>application_name</th>
+												<th>could_noncloud</th>
+												<th>Automation_status</th>
+												<th>automation_tool</th>
+												<th>in_sprint</th>
+												<th>litmus_onboarding</th>
+												<th>no_of_overall_regression_scripts</th>
+												<th>no_of_inscope_reg_scripts</th>
+												<th>no_of_regscripts_automated</th>
+												<th>percentage_automation_complete</th>
+												<th>percentage_application_penetration</th>
+												<th>time_to_manuallyexecute</th>
+												<th>no_of_release</th>
+												<th>monthly_manual_executiontime</th>
+												<th>monthly_effort_spent_on_dev_automation</th>
+												<th>time_to_execute_1automatedtestcase</th>
+												<th>mothly_automate_executiontime</th>
+												<th>monthly_effort_spentin_maintaining_automation</th>
+												<th>monthly_effort_takes_toexecute_regscript</th>
+												<th>hours_saved_monthly</th>
+												<th>comments</th>
+
+                                        </tr>
+                                    </thead>
+									{% for obj in object_list %}
+                                    <tbody>
+                                        <tr>
+                                                <td>{{ obj.serialnumber }}</td>
+												<td>{{ obj.month }}</td>
+												<td>{{ obj.year }}</td>
+												<td>{{ obj.portfolio }}</td>
+												<td>{{ obj.AIT_Number }}</td>
+												<td>{{ obj.application_name }}</td>
+												<td>{{ obj.could_noncloud }}</td>
+												<td>{{ obj.Automation_status }}</td>
+												<td>{{ obj.automation_tool }}</td>
+												<td>{{ obj.in_sprint }}</td>
+												<td>{{ obj.litmus_onboarding }}</td>
+												<td>{{ obj.no_of_overall_regression_scripts }}</td>
+												<td>{{ obj.no_of_inscope_reg_scripts }}</td>
+												<td>{{ obj.no_of_regscripts_automated }}</td>
+												<td>{{ obj.percentage_automation_complete }}</td>
+												<td>{{ obj.percentage_application_penetration }}</td>
+												<td>{{ obj.time_to_manuallyexecute }}</td>
+												<td>{{ obj.no_of_release }}</td>
+												<td>{{ obj.monthly_manual_executiontime }}</td>
+												<td>{{ obj.monthly_effort_spent_on_dev_automation }}</td>
+												<td>{{ obj.time_to_execute_1automatedtestcase }}</td>
+												<td>{{ obj.mothly_automate_executiontime }}</td>
+												<td>{{ obj.monthly_effort_spentin_maintaining_automation }}</td>
+												<td>{{ obj.monthly_effort_takes_toexecute_regscript }}</td>
+												<td>{{ obj.hours_saved_monthly }}</td>
+												<td>{{ obj.comments }}</td>
+
+                                        </tr>
+									</tbody>
+									{% endfor %}
+								</table>
+
+							</div>
+
+						</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+</body>
+</html>
+{% endblock %}
