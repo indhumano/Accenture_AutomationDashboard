@@ -166,18 +166,20 @@
 
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <!-- Search -->
-              <div class="navbar-nav align-items-center">
-                <div class="nav-item d-flex align-items-center">
-                  <i class="bx bx-search fs-4 lh-0"></i>
-                  <input
-                    type="text"
-                    class="form-control border-0 shadow-none"
-                    placeholder="Search..."
-                    aria-label="Search..."
-                  />
-                </div>
-              </div>
-              <!-- /Search -->
+                  <div class="navbar-nav align-items-center">
+                    <div class="nav-item d-flex align-items-center">
+                      <i class="bx bx-search fs-4 lh-0"></i>
+                      <input
+                        type="text"
+                        class="form-control border-0 shadow-none"
+                        placeholder="Search..."
+                        aria-label="Search..."
+                        name="search"
+                      />
+                    </div>
+                  </div>
+
+              <!--</form> /Search -->
 
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <!-- Place this tag where you want the button to render. -->
@@ -269,8 +271,14 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                       <!-- {% for obj in object_list %}
+                                        {{ obj.no_of_regscripts_automated }}
+                                        {% endfor %}-->
+
+
                                         <span class="fw-semibold d-block mb-1">No. Of Regression Scripts Automated</span>
-                                        <h3 class="card-title mb-2">{{sum_nr}}</h3>
+                                        <h3 class="card-title mb-2">{{}}</h3>
                                         <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
                                     </div>
                                 </div>
@@ -310,6 +318,7 @@
                                             <div class="avatar flex-shrink-0">
                                                 <img src="{% static 'assets/img/icons/unicons/chart-success.png' %}" alt="Credit Card" class="rounded" />
                                             </div>
+
                                             <div class="dropdown">
                                                 <button class="btn p-0"
                                                         type="button"
@@ -344,7 +353,21 @@
 
                             <h5 class="card-header">Automation Dashboard Table</h5>
 
-                            <div class="container"><a href="{% url 'Insert_automation_data' %}" class="btn btn-primary">Add Entry</a></div>
+                            <div class="container">
+
+                                <form action="" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="file"
+                                           title="Upload excel file"
+                                           name="excel_data"
+                                           style="border: 1px solid black; padding: 5px;"
+                                           required="required">
+                                    <p>
+                                    <input type="submit"
+                                           value="Upload"
+                                           style="border: 1px solid green; padding:5px; border-radius: 2px; cursor: pointer;">
+                                </form>
+                            </div>
 
                             <div class="table-responsive text-nowrap">
 
