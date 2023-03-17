@@ -1,9 +1,13 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .forms import Insert_automation_data
 from django.views import generic
 from .models import automation_db
+from django.db.models import Avg
+from django.urls import reverse
 import openpyxl
+import pandas as pd
+from django.db import transaction
 
 # Create your views here.
 def home(request):
@@ -13,10 +17,12 @@ class index(generic.ListView):
     model = automation_db
     template_name = 'Index.html'
 
-    """ def get_context_data(self, *, object_list=None, **kwargs):
-        context = (automation_db,self).get_context_data(**kwargs)
-        context['reg_scripts'] = 
-    """
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(index, self).get_context_data(**kwargs)
+        context['no_of_regscripts_automated_average'] = int(automation_db.objects.aggregate(no_of_regscripts_automated_average=Avg('no_of_regscripts_automated'))['no_of_regscripts_automated_average'])
+        context['percentage_automation_complete_average'] = automation_db.objects.aggregate(percentage_automation_complete_average=Avg('percentage_automation_complete'))['percentage_automation_complete_average']
+        context['percentage_application_penetration_average'] = automation_db.objects.aggregate(percentage_application_penetration_average=Avg('percentage_application_penetration'))['percentage_application_penetration_average']
+        return context
 
 class Insert_automation_data_view(generic.CreateView):
     form_class = Insert_automation_data
@@ -33,37 +39,59 @@ def upload_excel(request):
         return render(request, 'dashboard_app/Index.html', {})
     else:
         excel_file = request.FILES["excel_data"]
+        columns_with_data = list(range(26))
+        file_df = pd.read_excel(excel_file, sheet_name='Sheet1', usecols=columns_with_data)
 
-        # you may put validations here to check extension or file size
+        for index, row in file_df.iterrows():
+            serialnumber = row['SERIALNUMBER']
+            month = row['MONTH']
+            year = row['YEAR']
+            portfolio = row['PORTFOLIO']
+            AIT_Number = row['AIT_NUMBER']
+            application_name = row['APPLICATION_NAME']
+            could_noncloud = row['COULD_NONCLOUD']
+            Automation_status = row['AUTOMATION_STATUS']
+            automation_tool = row['AUTOMATION_TOOL']
+            in_sprint = row['IN_SPRINT']
+            litmus_onboarding = row['LITMUS_ONBOARDING']
+            no_of_overall_regression_scripts = row['NO_OF_OVERALL_REGRESSION_SCRIPTS']
+            no_of_inscope_reg_scripts = row['NO_OF_INSCOPE_REG_SCRIPTS']
+            no_of_regscripts_automated = row['NO_OF_REGSCRIPTS_AUTOMATED']
+            percentage_automation_complete = row['PERCENTAGE_AUTOMATION_COMPLETE']
+            percentage_application_penetration = row['PERCENTAGE_APPLICATION_PENETRATION']
+            time_to_manuallyexecute = row['TIME_TO_MANUALLYEXECUTE']
+            no_of_release = row['NO_OF_RELEASE']
+            monthly_manual_executiontime = row['MONTHLY_MANUAL_EXECUTIONTIME']
+            monthly_effort_spent_on_dev_automation = row['MONTHLY_EFFORT_SPENT_ON_DEV_AUTOMATION']
+            time_to_execute_1automatedtestcase = row['TIME_TO_EXECUTE_1AUTOMATEDTESTCASE']
+            mothly_automate_executiontime = row['MOTHLY_AUTOMATE_EXECUTIONTIME']
+            monthly_effort_spentin_maintaining_automation = row['MONTHLY_EFFORT_SPENTIN_MAINTAINING_AUTOMATION']
+            monthly_effort_takes_toexecute_regscript = row['MONTHLY_EFFORT_TAKES_TOEXECUTE_REGSCRIPT']
+            hours_saved_monthly = row['HOURS_SAVED_MONTHLY']
+            comments = row['COMMENTS']
 
-        wb = openpyxl.load_workbook(excel_file)
+            with transaction.atomic():
+                object = automation_db(serialnumber=serialnumber, month=month, year=year, portfolio=portfolio, AIT_Number=AIT_Number,
+                              application_name=application_name,
+                              could_noncloud=could_noncloud, Automation_status=Automation_status,
+                              automation_tool=automation_tool, in_sprint=in_sprint,
+                              litmus_onboarding=litmus_onboarding,
+                              no_of_overall_regression_scripts=no_of_overall_regression_scripts,
+                              no_of_inscope_reg_scripts=no_of_inscope_reg_scripts,
+                              no_of_regscripts_automated=no_of_regscripts_automated,
+                              percentage_automation_complete=percentage_automation_complete,
+                              percentage_application_penetration=percentage_application_penetration,
+                              time_to_manuallyexecute=time_to_manuallyexecute,
+                              no_of_release=no_of_release,
+                              monthly_manual_executiontime=monthly_manual_executiontime,
+                              monthly_effort_spent_on_dev_automation=monthly_effort_spent_on_dev_automation,
+                              time_to_execute_1automatedtestcase=time_to_execute_1automatedtestcase,
+                              mothly_automate_executiontime=mothly_automate_executiontime,
+                              monthly_effort_spentin_maintaining_automation=monthly_effort_spentin_maintaining_automation,
+                              monthly_effort_takes_toexecute_regscript=monthly_effort_takes_toexecute_regscript,
+                              hours_saved_monthly=hours_saved_monthly,
+                              comments=comments)
+                object.save()
+                print(object.serialnumber)
 
-        # getting all sheets
-        sheets = wb.sheetnames
-        print(sheets)
-
-        # getting a particular sheet
-        worksheet = wb["Sheet1"]
-        print(worksheet)
-
-        # getting active sheet
-        active_sheet = wb.active
-        print(active_sheet)
-
-        # reading a cell
-        print(worksheet["A1:A10"].value)
-
-        excel_data = list()
-        # iterating over the rows and
-        # getting value from each cell in row
-
-        model = automation_db
-
-        for row in worksheet.iter_rows():
-            row_data = list()
-            for cell in row:
-                row_data.append(str(cell.value))
-                print(cell.value)
-            excel_data.append(row_data)
-
-        #return render(request, 'dashboard_app/Index.html', {"excel_data": excel_data})
+        return HttpResponseRedirect(reverse('Index'))

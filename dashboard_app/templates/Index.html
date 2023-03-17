@@ -130,7 +130,7 @@
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
             <li class="menu-item active">
-              <a href="Index.html" class="menu-link">
+              <a href="{% url 'Index' %}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
@@ -278,8 +278,8 @@
 
 
                                         <span class="fw-semibold d-block mb-1">No. Of Regression Scripts Automated</span>
-                                        <h3 class="card-title mb-2">{{}}</h3>
-                                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
+                                        <h3 class="card-title mb-2">{{ no_of_regscripts_automated_average }}</h3>
+<!--                                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>-->
                                     </div>
                                 </div>
                             </div>
@@ -306,8 +306,8 @@
                                             </div>
                                         </div>
                                         <span class="d-block mb-1">Automation Complete</span>
-                                        <h3 class="card-title text-nowrap mb-2">94.92%</h3>
-                                        <small class="text-success fw-semibold"><i class="bx bx-down-arrow-alt"></i> 94.92%</small>
+                                        <h3 class="card-title text-nowrap mb-2">{{ percentage_automation_complete_average }}%</h3>
+<!--                                        <small class="text-success fw-semibold"><i class="bx bx-down-arrow-alt"></i> 94.92%</small>-->
                                     </div>
                                 </div>
                             </div>
@@ -335,8 +335,8 @@
                                             </div>
                                         </div>
                                         <span class="d-block mb-1">Automation Penetration</span>
-                                        <h3 class="card-title text-nowrap mb-2">92.39%</h3>
-                                        <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                        <h3 class="card-title text-nowrap mb-2">{{ percentage_application_penetration_average }}%</h3>
+<!--                                        <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i> -14.82%</small>-->
                                     </div>
                                 </div>
                             </div>
@@ -355,7 +355,7 @@
 
                             <div class="container">
 
-                                <form action="" method="post" enctype="multipart/form-data">
+                                <form action="{% url 'upload_excel' %}" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <input type="file"
                                            title="Upload excel file"
