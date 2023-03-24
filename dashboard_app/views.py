@@ -1,11 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from .forms import Insert_automation_data
 from django.views import generic
 from .models import automation_db
 from django.db.models import Avg
 from django.urls import reverse
-import openpyxl
 import pandas as pd
 from django.db import transaction
 
@@ -24,11 +23,21 @@ class index(generic.ListView):
         context['percentage_application_penetration_average'] = automation_db.objects.aggregate(percentage_application_penetration_average=Avg('percentage_application_penetration'))['percentage_application_penetration_average']
         return context
 
-class Insert_automation_data_view(generic.CreateView):
-    form_class = Insert_automation_data
-    model = automation_db
-    template_name = 'Insert_automation_data.html'
-    success_url = '/list/createdata'
+def Insert_automation_data_view(request):
+    # form_class = Insert_automation_data
+    # model = automation_db
+    # template_name = 'Insert_automation_data.html'
+    # success_url = '/list/createdata'
+    if "GET" == request.method:
+        return render(request, 'Insert_automation_data.html')
+    else:
+        form = Insert_automation_data(request.POST)
+        if form.is_valid():
+            new_automation_entry = form.save()
+            return render(request, 'Insert_automation_data.html', {'message': 'New Entry Done successfully'})
+        else:
+            print(form.errors)
+            return render(request, 'Insert_automation_data.html', {'message': 'Error while doing entry'})
 
 class table_automation_view(generic.ListView):
     model = automation_db
