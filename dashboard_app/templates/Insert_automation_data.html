@@ -54,6 +54,7 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{% static 'assets/js/config.js' %}"></script>
+
   </head>
 
   <body>
@@ -120,7 +121,9 @@
                   </g>
                 </svg>
               </span>
-              <span class="app-brand-text demo menu-text fw-bolder ms-2">Automation</span>
+              <a href="{% url 'Dashboard' %}" class="menu-link" target="_blank">
+                <span class="app-brand-text demo menu-text fw-bolder ms-2">Automation</span>
+              </a>
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -133,7 +136,7 @@
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
             <li class="menu-item active">
-              <a href="Index.html" class="menu-link">
+              <a href="{% url 'Dashboard' %}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
@@ -173,7 +176,7 @@
                   <div class="navbar-nav align-items-center">
                     <div class="nav-item d-flex align-items-center">
                       <i class="bx bx-search fs-4 lh-0"></i>
-                      <input
+                      <input id="search"
                         type="text"
                         class="form-control border-0 shadow-none"
                         placeholder="Search..."
@@ -248,174 +251,205 @@
 
 
     <div class="card">
-      <div class="col-lg-12 col-md-12 order-1">
+      <div class="">
         <div class="card-body">
         <div class="insert_data_background">
-          <h3>{{ message }}</h3>
-          <h2>Please fill the details and click Submit</h2>
+            <h3>{{ message }}</h3>
+          <div class="mb-5">
+            <h2>Please fill the details and click Submit</h2>
+          </div>
           <form class="form-horizontal" method="post" action="{% url 'Insert_automation_data' %}">
               {% csrf_token %}
-            <div class="form-group">
-              <label for="Serialnumber">Serialnumber:</label>
-              <input id="Serialnumber" name="serialnumber" type="number" required/>
+            <div class="form-group row mb-3">
+              <label for="Serialnumber" class="control-label col-lg-4">Serial Number :</label>
+              <div class="col-lg-8">
+                <input id="Serialnumber" name="serialnumber" type="number" class="form-control" required/>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="month">Month</label>
-              <select id='month' name="month" onchange="show_month()" required>
-                  <option selected value=''>--Select Month--</option>
-                  <option value='1'>Janaury</option>
-                  <option value='2'>February</option>
-                  <option value='3'>March</option>
-                  <option value='4'>April</option>
-                  <option value='5'>May</option>
-                  <option value='6'>June</option>
-                  <option value='7'>July</option>
-                  <option value='8'>August</option>
-                  <option value='9'>September</option>
-                  <option value='10'>October</option>
-                  <option value='11'>November</option>
-                  <option value='12'>December</option>
-              </select>
+            <div class="form-group row mb-3">
+              <label for="month" class="control-label col-lg-4">Month :</label>
+              <div class="col-lg-8">
+                <select id='month' name="month" onchange="show_month()" class="form-control" required>
+                    <option selected value=''>--Select Month--</option>
+                    <option value='1'>Janaury</option>
+                    <option value='2'>February</option>
+                    <option value='3'>March</option>
+                    <option value='4'>April</option>
+                    <option value='5'>May</option>
+                    <option value='6'>June</option>
+                    <option value='7'>July</option>
+                    <option value='8'>August</option>
+                    <option value='9'>September</option>
+                    <option value='10'>October</option>
+                    <option value='11'>November</option>
+                    <option value='12'>December</option>
+                </select>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="year">Year:</label>
-              <input id="year" name="year" type="number" min="1900" max="2099" step="1" value="2023" required/>
+            <div class="form-group row mb-3">
+              <label for="year" class="control-label col-lg-4">Year :</label>
+              <div class="col-lg-8">
+                <input id="year" name="year" type="number" min="1900" max="2099" step="1" value="2023" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="portfolio" class="control-label col-lg-4">Portfolio :</label>
+              <div class="col-lg-8">
+                <input type="text" name="portfolio" class="form-control" id="portfolio" required>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="aitnumber" class="control-label col-lg-4">AIT Number :</label>
+              <div class="col-lg-8">
+                <input id="aitnumber" name="AIT_Number" type="number" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="application_name" class="control-label col-lg-4">Application Name :</label>
+              <div class="col-lg-8">
+                <input type="text" name="application_name" class="form-control" id="application_name" required>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="cloud_noncloud" class="control-label col-lg-4">Cloud Non-Cloud :</label>
+              <div class="col-lg-8">
+                <select id='cloud_noncloud' name="could_noncloud" class="form-control" required>
+                    <option selected value=''>--Select--</option>
+                    <option value='Cloud'>Cloud</option>
+                    <option value='Noncloud'>Non-Cloud</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="automation_status" class="control-label col-lg-4">Automation Status :</label>
+              <div class="col-lg-8">
+                <select id='automation_status' name="Automation_status" class="form-control" required>
+                    <option selected value=''>--Select--</option>
+                    <option value='Not-started'>Not Started</option>
+                    <option value='In-progress'>In-Progress</option>
+                    <option value='Completed'>Completed</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="automation_tool" class="control-label col-lg-4">Automation Tool :</label>
+              <div class="col-lg-8">
+                <input type="text" class="form-control" id="automation_tool" name="automation_tool" required>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="insprint" class="control-label col-lg-4">In Sprint :</label>
+              <div class="col-lg-8">
+                <select id='insprint' name="in_sprint" class="form-control" required>
+                    <option selected value=''>--Select--</option>
+                    <option value='Yes'>Yes</option>
+                    <option value='No'>No</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="litmus_onboarding" class="control-label col-lg-4">Litmus Onboarding :</label>
+              <div class="col-lg-8">
+                <select id='litmus_onboarding' name="litmus_onboarding" class="form-control" required>
+                    <option selected value=''>--Select--</option>
+                    <option value='Yes'>Yes</option>
+                    <option value='No'>No</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="No_Of_Overall_Regression_Scripts" class="control-label col-lg-4">No of Overall Regression Scripts :</label>
+              <div class="col-lg-8">
+                <input id="No_Of_Overall_Regression_Scripts" name="no_of_overall_regression_scripts" type="number" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="no_of_inscope_reg_scripts" class="control-label col-lg-4">No of in-scope Reg Scripts :</label>
+              <div class="col-lg-8">
+                <input id="no_of_inscope_reg_scripts" name="no_of_inscope_reg_scripts" type="number"  min="0" value="0" step="any" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="no_of_inscope_reg_scripts" class="control-label col-lg-4">No of Regscripts Automated :</label>
+              <div class="col-lg-8">
+                <input id="no_of_regscripts_automated" name="no_of_regscripts_automated" type="number"  min="0" value="0" step="any" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="Percentage_Automation_Complete" class="control-label col-lg-4">Percentage Automation Complete :</label>
+              <div class="col-lg-8">
+                <input id="Percentage_Automation_Complete" name="percentage_automation_complete" type="number"  min="0" value="0" step="any" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="Percentage_Application_Penetration" class="control-label col-lg-4">Percentage Application Penetration :</label>
+              <div class="col-lg-8">
+                <input id="Percentage_Application_Penetration" name="percentage_application_penetration" type="number"  min="0" value="0" step="any" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="time_to_manuallyexecute" class="control-label col-lg-4">Time to Manually Execute :</label>
+              <div class="col-lg-8">
+                <input id="time_to_manuallyexecute" name="time_to_manuallyexecute" type="number"  min="0" value="0" step="any" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="No_Of_Release" class="control-label col-lg-4">No of Release :</label>
+              <div class="col-lg-8">
+                <input id="No_Of_Release" name="no_of_release" type="number"  min="0" value="0" step="any" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="Monthly_Manual_Executiontime" class="control-label col-lg-4">Monthly Manual Execution time :</label>
+              <div class="col-lg-8">
+                <input id="Monthly_Manual_Executiontime" name="monthly_manual_executiontime" type="number"  min="0" value="0" step="any" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="Monthly_Effort_Spent_On_Dev_Automation" class="control-label col-lg-4">Monthly Effort Spent on Dev Automation :</label>
+              <div class="col-lg-8">
+                <input id="Monthly_Effort_Spent_On_Dev_Automation" name="monthly_effort_spent_on_dev_automation" type="number"  min="0" value="0" step="any" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="Time_To_Execute_1automatedtestcase" class="control-label col-lg-4">Time to Execute 1 Automated Test Case :</label>
+              <div class="col-lg-8">
+                <input id="Time_To_Execute_1automatedtestcase" name="time_to_execute_1automatedtestcase" type="number"  min="0" value="0" step="any" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="Mothly_Automate_Executiontime" class="control-label col-lg-4">Monthly Automate Execution Time :</label>
+              <div class="col-lg-8">
+                <input id="Mothly_Automate_Executiontime" name="mothly_automate_executiontime" type="number"  min="0" value="0" step="any" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="Monthly_Effort_Spent_in_Maintaining_Automation" class="control-label col-lg-4">Monthly Effort Spent in Maintaining Automation :</label>
+              <div class="col-lg-8">
+                <input id="Monthly_Effort_Spent_in_Maintaining_Automation" name="monthly_effort_spentin_maintaining_automation" type="number"  min="0" value="0" step="any" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="Monthly_Effort_Takes_Toexecute_Regscript" class="control-label col-lg-4">Monthly Effort Takes To execute Regscript :</label>
+              <div class="col-lg-8">
+                <input id="Monthly_Effort_Takes_Toexecute_Regscript" name="monthly_effort_takes_toexecute_regscript" type="number"  min="0" value="0" step="any" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="Hours_Saved_Monthly" class="control-label col-lg-4">Monthly Effort Taken to execute Regscript :</label>
+              <div class="col-lg-8">
+                <input id="Hours_Saved_Monthly" name="hours_saved_monthly" type="number"  min="0" value="0" step="any" class="form-control" required/>
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label for="comment" class="control-label col-lg-4">Comments :</label>
+              <div class="col-lg-8">
+                <textarea name="comments" class="form-control" id="comment" required></textarea>
+              </div>
             </div>
 
-            <div class="form-group">
-              <label for="portfolio">Portfolio:</label>
-              <input type="text" name="portfolio" class="form-control" id="portfolio" required>
-            </div>
-
-            <div class="form-group">
-              <label for="aitnumber">AIT Number:</label>
-              <input id="aitnumber" name="AIT_Number" type="number" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="application_name">Application_Name:</label>
-              <input type="text" name="application_name" class="form-control" id="application_name" required>
-            </div>
-
-            <div class="form-group">
-              <label for="cloud_noncloud">Cloud_Non-Cloud</label>
-              <select id='cloud_noncloud' name="could_noncloud" required>
-                  <option selected value=''>--Select--</option>
-                  <option value='Cloud'>Cloud</option>
-                  <option value='Noncloud'>Non-Cloud</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="automation_status">Automation_Status</label>
-              <select id='automation_status' name="Automation_status" required>
-                  <option selected value=''>--Select--</option>
-                  <option value='Not-started'>Not Started</option>
-                  <option value='In-progress'>In-Progress</option>
-                  <option value='Completed'>Completed</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="automation_tool">Automation_Tool:</label>
-              <input type="text" class="form-control" id="automation_tool" name="automation_tool" required>
-            </div>
-
-            <div class="form-group">
-              <label for="insprint">In Sprint</label>
-              <select id='insprint' name="in_sprint" required>
-                  <option selected value=''>--Select--</option>
-                  <option value='Yes'>Yes</option>
-                  <option value='No'>No</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="litmus_onboarding">Litmus_Onboarding</label>
-              <select id='litmus_onboarding' name="litmus_onboarding" required>
-                  <option selected value=''>--Select--</option>
-                  <option value='Yes'>Yes</option>
-                  <option value='No'>No</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="No_Of_Overall_Regression_Scripts">No_Of_Overall_Regression_Scripts:</label>
-              <input id="No_Of_Overall_Regression_Scripts" name="no_of_overall_regression_scripts" type="number" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="no_of_inscope_reg_scripts">No of inscope Reg Scripts:</label>
-              <input id="no_of_inscope_reg_scripts" name="no_of_inscope_reg_scripts" type="number"  min="0" value="0" step="any" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="no_of_inscope_reg_scripts">No of Regscripts Automated:</label>
-              <input id="no_of_regscripts_automated" name="no_of_regscripts_automated" type="number"  min="0" value="0" step="any" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="Percentage_Automation_Complete">Percentage_Automation_Complete:</label>
-              <input id="Percentage_Automation_Complete" name="percentage_automation_complete" type="number"  min="0" value="0" step="any" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="Percentage_Application_Penetration">Percentage_Application_Penetration:</label>
-              <input id="Percentage_Application_Penetration" name="percentage_application_penetration" type="number"  min="0" value="0" step="any" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="time_to_manuallyexecute">Time to Manually Execute:</label>
-              <input id="time_to_manuallyexecute" name="time_to_manuallyexecute" type="number"  min="0" value="0" step="any" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="No_Of_Release">No_Of_Release:</label>
-              <input id="No_Of_Release" name="no_of_release" type="number"  min="0" value="0" step="any" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="Monthly_Manual_Executiontime">Monthly_Manual_Executiontime:</label>
-              <input id="Monthly_Manual_Executiontime" name="monthly_manual_executiontime" type="number"  min="0" value="0" step="any" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="Monthly_Effort_Spent_On_Dev_Automation">Monthly_Effort_Spent_On_Dev_Automation:</label>
-              <input id="Monthly_Effort_Spent_On_Dev_Automation" name="monthly_effort_spent_on_dev_automation" type="number"  min="0" value="0" step="any" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="Time_To_Execute_1automatedtestcase">Time_To_Execute_1automatedtestcase:</label>
-              <input id="Time_To_Execute_1automatedtestcase" name="time_to_execute_1automatedtestcase" type="number"  min="0" value="0" step="any" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="Mothly_Automate_Executiontime">Mothly_Automate_Executiontime:</label>
-              <input id="Mothly_Automate_Executiontime" name="mothly_automate_executiontime" type="number"  min="0" value="0" step="any" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="Monthly_Effort_Spentin_Maintaining_Automation">Monthly_Effort_Spentin_Maintaining_Automation:</label>
-              <input id="Monthly_Effort_Spentin_Maintaining_Automation" name="monthly_effort_spentin_maintaining_automation" type="number"  min="0" value="0" step="any" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="Monthly_Effort_Takes_Toexecute_Regscript">Monthly_Effort_Takes_Toexecute_Regscript:</label>
-              <input id="Monthly_Effort_Takes_Toexecute_Regscript" name="monthly_effort_takes_toexecute_regscript" type="number"  min="0" value="0" step="any" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="Hours_Saved_Monthly">Monthly_Effort_Takes_Toexecute_Regscript:</label>
-              <input id="Hours_Saved_Monthly" name="hours_saved_monthly" type="number"  min="0" value="0" step="any" required/>
-            </div>
-
-            <div class="form-group">
-              <label for="comment">Comments</label>
-              <input type="textarea" name="comments" class="form-control" id="comment" required>
-            </div>
-
-
-             <button type="submit" class="btn btn-default">Submit</button>
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
 
           </form>
         </div>
@@ -449,7 +483,6 @@
 
       <!-- Overlay -->
       <div class="layout-overlay layout-menu-toggle"></div>
-    </div>
 
     <!-- / Layout wrapper -->
 

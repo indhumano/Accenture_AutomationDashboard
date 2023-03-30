@@ -48,9 +48,36 @@
     <!-- Helpers -->
     <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
 
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{% static 'assets/js/config.js' %}"></script>
+      <script>
+      $(document).ready(function(){
+          $("#search").keyup(function(e) {
+            // only fires when the focus is on the search box
+
+            var search_keyword = $("#search").val();
+            // hide all table rows which does not contains search keyword
+            $("#data tr td").filter(function() {
+                return $(this).text() != search_keyword;
+            }).parent('tr').hide();
+
+            // show all table rows which contains search keyword
+            $("#data tr td").filter(function() {
+                return $(this).text() == search_keyword;
+            }).parent('tr').show();
+
+            // if search keyword is blank, show all table rows
+            if (search_keyword == ""){
+                $("#data tr").show();
+            }
+
+          });
+      });
+      </script>
   </head>
 
   <body>
@@ -117,7 +144,9 @@
                   </g>
                 </svg>
               </span>
-              <span class="app-brand-text demo menu-text fw-bolder ms-2">Automation</span>
+                <a href="{% url 'Dashboard' %}" class="menu-link" target="_blank">
+                    <span class="app-brand-text demo menu-text fw-bolder ms-2">Automation</span>
+                </a>
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -130,7 +159,7 @@
           <ul class="menu-inner py-1">
             <!-- Dashboard -->
             <li class="menu-item active">
-              <a href="{% url 'Index' %}" class="menu-link">
+              <a href="{% url 'Dashboard' %}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
@@ -169,7 +198,7 @@
                   <div class="navbar-nav align-items-center">
                     <div class="nav-item d-flex align-items-center">
                       <i class="bx bx-search fs-4 lh-0"></i>
-                      <input
+                      <input id="search"
                         type="text"
                         class="form-control border-0 shadow-none"
                         placeholder="Search..."
@@ -306,7 +335,7 @@
                                             </div>
                                         </div>
                                         <span class="d-block mb-1">Automation Complete</span>
-                                        <h3 class="card-title text-nowrap mb-2">{{ percentage_automation_complete_average }}%</h3>
+                                        <h3 class="card-title text-nowrap mb-2">{{ percentage_automation_complete_average|floatformat }}%</h3>
 <!--                                        <small class="text-success fw-semibold"><i class="bx bx-down-arrow-alt"></i> 94.92%</small>-->
                                     </div>
                                 </div>
@@ -335,7 +364,7 @@
                                             </div>
                                         </div>
                                         <span class="d-block mb-1">Automation Penetration</span>
-                                        <h3 class="card-title text-nowrap mb-2">{{ percentage_application_penetration_average }}%</h3>
+                                        <h3 class="card-title text-nowrap mb-2">{{ percentage_application_penetration_average|floatformat }}%</h3>
 <!--                                        <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i> -14.82%</small>-->
                                     </div>
                                 </div>
@@ -353,7 +382,7 @@
 
                             <h5 class="card-header">Automation Dashboard Table</h5>
 
-                            <div class="container">
+                            <div class="container" hidden>
 
                                 <form action="{% url 'upload_excel' %}" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
@@ -371,7 +400,7 @@
 
                             <div class="table-responsive text-nowrap">
 
-                            <table class="table">
+                            <table id="data" class="table">
                                     <thead>
                                         <tr class="text-nowrap">
                                                 <th>serialnumber</th>
