@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from .forms import Insert_automation_data
 from django.views import generic
@@ -10,7 +10,7 @@ from django.db import transaction
 
 # Create your views here.
 def home(request):
-    return render(request, "Index.html", context={})
+    return redirect('Dashboard')
 
 class index(generic.ListView):
     model = automation_db
