@@ -270,6 +270,7 @@
 
           <!-- Content wrapper -->
           <div class="content-wrapper">
+              {% block content %}
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
@@ -475,7 +476,7 @@
 
             </div>
             <!-- / Content -->
-
+            {% endblock content %}
             <!-- Footer -->
             <footer class="content-footer footer bg-footer-theme">
               <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
