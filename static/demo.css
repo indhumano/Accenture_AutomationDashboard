@@ -17,9 +17,10 @@
 }
 
 .app-brand-text.demo {
-  font-size: 1.75rem;
+  font-size: 1.4rem;
   letter-spacing: -0.5px;
   text-transform: capitalize;
+  color:#fff;
 }
 
 /* ! For .layout-navbar-fixed added fix padding top tpo .layout-page */
@@ -109,3 +110,16 @@
   margin-top: 1rem;
 }
 .buy-now{display:none;}
+.layout-page{padding-left:0!important;}
+#layout-menu{display:none;}
+.top-menu-block{background-color: #061b41;
+    padding: 2px 0;
+    border-bottom: 3px double #FFF;
+    box-shadow: 0px 2px 5px #000;}
+ .ms-left{margin-left:10px !important;z-index:9999;}
+ .demo{margin-top:4px;}
+
+.main-menu li a{color:#ff0;
+padding-right: 10px!important;
+padding-left: 10px!important;}
+.main-menu li a.active{background:#a70026; color:#fff;}
