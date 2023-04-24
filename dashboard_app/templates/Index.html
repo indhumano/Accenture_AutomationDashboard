@@ -58,23 +58,10 @@
       $(document).ready(function(){
           $("#search").keyup(function(e) {
             // only fires when the focus is on the search box
-
-            var search_keyword = $("#search").val();
-            // hide all table rows which does not contains search keyword
-            $("#data tr td").filter(function() {
-                return $(this).text() != search_keyword;
-            }).parent('tr').hide();
-
-            // show all table rows which contains search keyword
-            $("#data tr td").filter(function() {
-                return $(this).text() == search_keyword;
-            }).parent('tr').show();
-
-            // if search keyword is blank, show all table rows
-            if (search_keyword == ""){
-                $("#data tr").show();
-            }
-
+            var searchValue = $("#search").val().toLowerCase();
+            $('#data tr').filter(function(){
+              $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1)
+            });
           });
       });
       </script>
