@@ -19,22 +19,20 @@
                                 <table class="table table-dark">
                                     <thead>
                                         <tr class="text-nowrap">
-                                                <th>S.No</th>
-												<th>Month</th>
-												<th>Year</th>
-												<th>Portfolio</th>
-												<th>AIT#</th>
+                                                <th>Sl.No</th>
+                                                <th>AIT</th>
+                                                <th>Portfolio</th>
 												<th>Application Name</th>
-												<th>Cloud/NonCloud</th>
-												<th>Automation Status</th>
-												<th>Automation Tool</th>
+                                                <th>Automation Status</th>
+                                                <th>Automation Tool</th>
+                                                <th>Cloud/NonCloud</th>
 												<th>In Sprint</th>
 												<th>Litmus Onboarding</th>
-												<th>No of Overall Regression Scripts</th>
-												<th>No of In-scope Regression Scripts</th>
-												<th>No of Regression Scripts Automated</th>
-												<th>Percentage Automation Complete</th>
-												<th>Percentage Application Penetration</th>
+												<th>Total # Regression Test Cases</th>
+												<th>Total # Regression Automatable</th>
+												<th>Total # Regression Automated</th>
+												<th>Automation Progress %</th>
+												<th>Automation Penetration %</th>
 												<th>Time to Manually Execute</th>
 												<th>No of Release</th>
 												<th>Monthly Manual Execution Time</th>
@@ -51,14 +49,12 @@
                                     <tbody>
                                         <tr>
                                                 <td>{{ obj.serialnumber }}</td>
-												<td>{{ obj.month }}</td>
-												<td>{{ obj.year }}</td>
-												<td>{{ obj.portfolio }}</td>
-												<td>{{ obj.AIT_Number }}</td>
+                                                <td>{{ obj.AIT_Number }}</td>
+                                                <td>{{ obj.portfolio }}</td>
 												<td>{{ obj.application_name }}</td>
-												<td>{{ obj.could_noncloud }}</td>
 												<td>{{ obj.Automation_status }}</td>
-												<td>{{ obj.automation_tool }}</td>
+                                                <td>{{ obj.automation_tool }}</td>
+                                                <td>{{ obj.could_noncloud }}</td>
 												<td>{{ obj.in_sprint }}</td>
 												<td>{{ obj.litmus_onboarding }}</td>
 												<td>{{ obj.no_of_overall_regression_scripts }}</td>
@@ -76,7 +72,6 @@
 												<td>{{ obj.monthly_effort_takes_toexecute_regscript }}</td>
 												<td>{{ obj.hours_saved_monthly }}</td>
 												<td>{{ obj.comments }}</td>
-
                                         </tr>
 									</tbody>
 									{% endfor %}
