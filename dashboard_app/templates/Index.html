@@ -59,14 +59,38 @@
           $("#search").keyup(function(e) {
             // only fires when the focus is on the search box
             var searchValue = $("#search").val().toLowerCase();
-            $('#data tr').filter(function(){
+            $('#data tbody tr').filter(function(){
               $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1)
             });
           });
+
+          $('.column-search').keyup(function(){
+            var searchValues = [];
+            $('.column-search').each(function(){
+              searchValues.push($(this).val().toLowerCase());
+            });
+            $('#data tbody tr').each(function(){
+              var rowVisible = true;
+              var cells = $(this).find('td');
+              for(var i = 0; i < searchValues.length; i++) {
+                var cellText = cells.eq(i).text().toLowerCase();
+                if (cellText.indexOf(searchValues[i]) === -1) {
+                  rowVisible = false;
+                  break;
+                }
+              }
+              $(this).toggle(rowVisible);
+            });
+          });
+
       });
       </script>
+      <style>
+        .column-search {
+            border: solid 1px !important
+        }
+      </style>
   </head>
-
   <body>
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
@@ -497,6 +521,224 @@
 
                             <table id="data" class="table table-hover table-custom">
                                     <thead>
+                                        <tr class="text-nowrap">
+                                                <th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Sl.No"
+                                                    data-column="0"
+                                                  />
+                                                </th>
+                                                <th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="AIT"
+                                                    data-column="1"
+                                                  />
+                                                </th>
+                                                <th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Portfolio"
+                                                    data-column="2"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Application Name"
+                                                    data-column="3"
+                                                  />
+                                                </th>
+                                                <th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Automation Status"
+                                                    data-column="4"
+                                                  />
+                                                </th>
+                                                <th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Automation Tool"
+                                                    data-column="5"
+                                                  />
+                                                </th>
+                                                <th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Cloud/NonCloud"
+                                                    data-column="6"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="In Sprint"
+                                                    data-column="7"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Litmus Onboarding"
+                                                    data-column="8"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Total # Regression Test Cases"
+                                                    data-column="9"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Total # Regression Automatable"
+                                                    data-column="10"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Total # Regression Automated"
+                                                    data-column="11"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Automation Progress %"
+                                                    data-column="12"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Automation Penetration %"
+                                                    data-column="13"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Time To Manually Execute"
+                                                    data-column="14"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="No Of Release"
+                                                    data-column="15"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Monthly Manual Execution Time"
+                                                    data-column="16"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Monthly Effort Spent On Dev Automation"
+                                                    data-column="17"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Time To Execute One Automated Test Case"
+                                                    data-column="18"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Monthly Automate Execution Time"
+                                                    data-column="19"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Monthly Effort Spent In Maintaining Automation"
+                                                    data-column="20"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Monthly Effort Taken To Execute Regression Script"
+                                                    data-column="21"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Hours Saved Monthly"
+                                                    data-column="22"
+                                                  />
+                                                </th>
+												<th>
+                                                  <input type="text"
+                                                    class="form-control border-0 shadow-none column-search"
+                                                    placeholder=""
+                                                    aria-label=""
+                                                    name="Comments"
+                                                    data-column="23"
+                                                  />
+                                                </th>
+                                        </tr>
                                         <tr class="text-nowrap">
                                                 <th>Sl.No</th>
                                                 <th>AIT</th>
