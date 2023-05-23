@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from .forms import Insert_automation_data
 from django.views import generic
 from .models import automation_db
-from django.db.models import Avg
+from django.db.models import Avg, Sum
 from django.urls import reverse
 import pandas as pd
 from django.db import transaction
@@ -18,9 +18,21 @@ class index(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(index, self).get_context_data(**kwargs)
-        context['no_of_regscripts_automated_average'] = int(automation_db.objects.aggregate(no_of_regscripts_automated_average=Avg('no_of_regscripts_automated'))['no_of_regscripts_automated_average'])
-        context['percentage_automation_complete_average'] = automation_db.objects.aggregate(percentage_automation_complete_average=Avg('percentage_automation_complete'))['percentage_automation_complete_average']
-        context['percentage_application_penetration_average'] = automation_db.objects.aggregate(percentage_application_penetration_average=Avg('percentage_application_penetration'))['percentage_application_penetration_average']
+        context['no_of_overall_regression_scripts'] = \
+        automation_db.objects.aggregate(no_of_overall_regression_scripts=Sum('no_of_overall_regression_scripts'))[
+            'no_of_overall_regression_scripts']  # 1
+        context['no_of_inscope_reg_scripts'] = \
+        automation_db.objects.aggregate(no_of_inscope_reg_scripts=Sum('no_of_inscope_reg_scripts'))[
+            'no_of_inscope_reg_scripts']  # 2
+        context['no_of_regscripts_automated'] = \
+        automation_db.objects.aggregate(no_of_regscripts_automated=Sum('no_of_regscripts_automated'))[
+            'no_of_regscripts_automated']  # 3
+        context['percentage_automation_complete_average'] = \
+        automation_db.objects.aggregate(percentage_automation_complete_average=Avg('percentage_automation_complete'))[
+            'percentage_automation_complete_average']  # 4
+        context['percentage_application_penetration_average'] = automation_db.objects.aggregate(
+            percentage_application_penetration_average=Avg('percentage_application_penetration'))[
+            'percentage_application_penetration_average']  # 5
         return context
 
 def Insert_automation_data_view(request):

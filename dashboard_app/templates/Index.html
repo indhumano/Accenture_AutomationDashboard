@@ -20,6 +20,9 @@
 
     <meta name="description" content="" />
     <link rel="stylesheet" href="{% static 'demo.css' %}">
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />-->
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon/favicon.ico' %}" />
 
@@ -50,41 +53,166 @@
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<!--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js">-->
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{% static 'assets/js/config.js' %}"></script>
-      <script>
-      $(document).ready(function(){
-          $("#search").keyup(function(e) {
-            // only fires when the focus is on the search box
-            var searchValue = $("#search").val().toLowerCase();
-            $('#data tbody tr').filter(function(){
-              $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1)
-            });
-          });
+    <script>
+        $(document).ready(function() {
+          // Populate the dropdowns with unique values from corresponding columns
+          populateDropdowns();
 
-          $('.column-search').keyup(function(){
-            var searchValues = [];
-            $('.column-search').each(function(){
-              searchValues.push($(this).val().toLowerCase());
+          // Handle change event of column-filter and column-search elements
+          $('.column-filter, .column-search').on('change keyup', function() {
+            var filters = [];
+            $('.column-filter, .column-search').each(function() {
+              var $element = $(this);
+              var columnIndex = $element.data('column');
+              var filterValue = $element.val();
+              filters.push({ columnIndex: columnIndex, filterValue: filterValue });
             });
-            $('#data tbody tr').each(function(){
+
+            // Hide/show rows based on filter values
+            $('#data tbody tr').each(function() {
               var rowVisible = true;
               var cells = $(this).find('td');
-              for(var i = 0; i < searchValues.length; i++) {
-                var cellText = cells.eq(i).text().toLowerCase();
-                if (cellText.indexOf(searchValues[i]) === -1) {
+              for (var i = 0; i < filters.length; i++) {
+                var columnIndex = filters[i].columnIndex;
+                var filterValue = filters[i].filterValue;
+                var cellText = cells.eq(columnIndex).text();
+
+                if (filterValue && filterValue !== 'all' && cellText.indexOf(filterValue) === -1) {
                   rowVisible = false;
                   break;
                 }
               }
               $(this).toggle(rowVisible);
             });
+
+            var visibleColumnValues = getColumnValues();
+            const card1 = [];
+            const card2 = [];
+            const card3 = [];
+            const card4 = [];
+            const card5 = [];
+            $.each(visibleColumnValues, function(index, array) {
+                    card1.push(array[9]);
+                    card2.push(array[10]);
+                    card3.push(array[11]);
+                    card4.push(array[12]);
+                    card5.push(array[13]);
+            });
+
+            var card4_sum = 0
+            var card4_count = 0
+            var card5_sum = 0
+            var card5_count = 0
+
+            var card1_sum = card1.reduce(function(acc, curr) {
+              return acc + parseInt(curr);
+            }, 0);
+
+            var card2_sum = card2.reduce(function(acc, curr) {
+              return acc + parseInt(curr);
+            }, 0);
+
+            var card3_sum = card3.reduce(function(acc, curr) {
+              return acc + parseInt(curr);
+            }, 0);
+            console.log(card3);
+
+            $.each(card4, function(index, element) {
+              card4_sum += parseFloat(element);
+              card4_count++;
+            });
+            var card4_avg = card4_sum / card4_count;
+
+            $.each(card5, function(index, element) {
+              card5_sum += parseFloat(element);
+              card5_count++;
+            });
+            var card5_avg = card5_sum / card5_count;
+
+            $("#card1").text(card1_sum);
+            $("#card2").text(card2_sum);
+            $("#card3").text(card3_sum);
+
+            var card4ValueIsInteger = Number.isInteger(card4_avg);
+            if (isNaN(card4_avg)){
+                $("#card4").text("0%");
+            }
+            else if(card4ValueIsInteger){
+                $("#card4").text(card4_avg.toString()+"%");
+            }
+            else{
+                $("#card4").text(card4_avg.toFixed(1)+"%");
+            }
+
+            var card5ValueIsInteger = Number.isInteger(card5_avg);
+            if (isNaN(card5_avg)){
+                $("#card5").text("0%");
+            }
+            else if(card5ValueIsInteger){
+                $("#card5").text(card5_avg.toString()+"%");
+            }
+            else{
+                $("#card5").text(card5_avg.toFixed(1)+"%");
+            }
+
+          });
+        });
+
+        // populating the dropdowns with row values for each column
+        function populateDropdowns() {
+          $('.column-filter').each(function() {
+            var columnIndex = $(this).data('column');
+            var uniqueValues = getUniqueValues(columnIndex);
+
+            var dropdown = $(this);
+            dropdown.empty();
+            dropdown.append($('<option>').val('all').text('All'));
+
+            uniqueValues.forEach(function(value) {
+              dropdown.append($('<option>').val(value).text(value));
+            });
+          });
+        }
+
+        function getUniqueValues(columnIndex) {
+          var uniqueValues = [];
+
+          $('#data tbody tr').each(function() {
+            var cellText = $(this).find('td').eq(columnIndex).text().trim();
+
+            if (cellText && !uniqueValues.includes(cellText)) {
+              uniqueValues.push(cellText);
+            }
           });
 
-      });
-      </script>
+          return uniqueValues;
+        }
+
+        function getColumnValues() {
+        var columnValues = [];
+
+        $('#data tbody tr:visible').each(function() {
+          var rowValues = [];
+          var cells = $(this).find('td');
+
+          cells.each(function() {
+            var cellValue = $(this).text();
+            rowValues.push(cellValue);
+          });
+
+          columnValues.push(rowValues);
+        });
+
+        return columnValues;
+        }
+
+    </script>
       <style>
         .column-search {
             border: solid 1px !important
@@ -228,19 +356,6 @@
                 Dashboard
             </a>
                       </li>
-                      <li class="nav-item">
-                        <a href="{% url 'admin:index' %}" class="nav-link" target="_self">
-
-                Admin
-            </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="{% url 'Insert_automation_data' %}" class="nav-link " target="_self">
-
-                 Insert Data
-            </a>
-                      </li>
-
                     </ul>
 
                   </div>
@@ -301,6 +416,20 @@
                         <span class="align-middle">My Profile</span>
                       </a>
                     </li>
+                    {% if user.is_admin %}
+                    <li>
+                      <a class="dropdown-item" href="{% url 'Insert_automation_data' %}">
+                        <i class="bx bx-user me-2"></i>
+                        <span class="align-middle">Insert Data</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'admin:index' %}">
+                        <i class="bx bx-user me-2"></i>
+                        <span class="align-middle">Admin Panel</span>
+                      </a>
+                    </li>
+                    {% endif %}
                     <li>
                       <a class="dropdown-item" href="#">
                         <i class="bx bx-cog me-2"></i>
@@ -368,8 +497,8 @@
                                         {% endfor %}-->
 
 
-                                        <span class="fw-semibold d-block mb-1">No. Of Regression Scripts Automated</span>
-                                        <h3 class="card-title mb-2">{{ no_of_regscripts_automated_average }}</h3>
+                                        <span class="fw-semibold d-block mb-1">Total # Regression Test Cases</span>
+                                        <h3 id="card1" class="card-title mb-2">{{ no_of_overall_regression_scripts }}</h3>
 <!--                                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>-->
                                     </div>
                                 </div>
@@ -396,8 +525,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <span class="d-block mb-1">Automation Complete</span>
-                                        <h3 class="card-title text-nowrap mb-2">{{ percentage_automation_complete_average|floatformat }}%</h3>
+                                        <span class="d-block mb-1">Total # Regression Automatable</span>
+                                        <h3 id="card2" class="card-title text-nowrap mb-2">{{ no_of_inscope_reg_scripts }}</h3>
 <!--                                        <small class="text-success fw-semibold"><i class="bx bx-down-arrow-alt"></i> 94.92%</small>-->
                                     </div>
                                 </div>
@@ -425,8 +554,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <span class="d-block mb-1">Automation Penetration</span>
-                                        <h3 class="card-title text-nowrap mb-2">{{ percentage_application_penetration_average|floatformat }}%</h3>
+                                        <span class="d-block mb-1">Total # Regression Automated</span>
+                                        <h3 id="card3" class="card-title text-nowrap mb-2">{{ no_of_regscripts_automated }}</h3>
 <!--                                        <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i> -14.82%</small>-->
                                     </div>
                                 </div>
@@ -454,8 +583,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <span class="d-block mb-1">Total no# of scripts</span>
-                                        <h3 class="card-title text-nowrap mb-2">{{ percentage_application_penetration_average|floatformat }}%</h3>
+                                        <span class="d-block mb-1">Automation Progress %</span>
+                                        <h3 id="card4" class="card-title text-nowrap mb-2">{{ percentage_automation_complete_average|floatformat }}%</h3>
 <!--                                        <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i> -14.82%</small>-->
                                     </div>
                                 </div>
@@ -483,8 +612,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <span class="d-block mb-1">Automation Candidates</span>
-                                        <h3 class="card-title text-nowrap mb-2">{{ percentage_application_penetration_average|floatformat }}%</h3>
+                                        <span class="d-block mb-1">Automation Penetration %</span>
+                                        <h3 id="card5" class="card-title text-nowrap mb-2">{{ percentage_application_penetration_average|floatformat }}%</h3>
 <!--                                        <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i> -14.82%</small>-->
                                     </div>
                                 </div>
@@ -547,224 +676,6 @@
                             <table id="data" class="table table-hover table-custom">
                                     <thead>
                                         <tr class="text-nowrap">
-                                                <th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Sl.No"
-                                                    data-column="0"
-                                                  />
-                                                </th>
-                                                <th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="AIT"
-                                                    data-column="1"
-                                                  />
-                                                </th>
-                                                <th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Portfolio"
-                                                    data-column="2"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Application Name"
-                                                    data-column="3"
-                                                  />
-                                                </th>
-                                                <th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Automation Status"
-                                                    data-column="4"
-                                                  />
-                                                </th>
-                                                <th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Automation Tool"
-                                                    data-column="5"
-                                                  />
-                                                </th>
-                                                <th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Cloud/NonCloud"
-                                                    data-column="6"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="In Sprint"
-                                                    data-column="7"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Litmus Onboarding"
-                                                    data-column="8"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Total # Regression Test Cases"
-                                                    data-column="9"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Total # Regression Automatable"
-                                                    data-column="10"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Total # Regression Automated"
-                                                    data-column="11"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Automation Progress %"
-                                                    data-column="12"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Automation Penetration %"
-                                                    data-column="13"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Time To Manually Execute"
-                                                    data-column="14"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="No Of Release"
-                                                    data-column="15"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Monthly Manual Execution Time"
-                                                    data-column="16"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Monthly Effort Spent On Dev Automation"
-                                                    data-column="17"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Time To Execute One Automated Test Case"
-                                                    data-column="18"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Monthly Automate Execution Time"
-                                                    data-column="19"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Monthly Effort Spent In Maintaining Automation"
-                                                    data-column="20"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Monthly Effort Taken To Execute Regression Script"
-                                                    data-column="21"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Hours Saved Monthly"
-                                                    data-column="22"
-                                                  />
-                                                </th>
-												<th>
-                                                  <input type="text"
-                                                    class="form-control border-0 shadow-none column-search"
-                                                    placeholder=""
-                                                    aria-label=""
-                                                    name="Comments"
-                                                    data-column="23"
-                                                  />
-                                                </th>
-                                        </tr>
-                                        <tr class="text-nowrap">
                                                 <th>Sl.No</th>
                                                 <th>AIT</th>
                                                 <th>Portfolio</th>
@@ -789,6 +700,296 @@
 												<th>Monthly Effort taken to Execute Regression Script</th>
 												<th>Hours Saved Monthly</th>
 												<th>Comments</th>
+                                        </tr>
+                                        <tr class="text-nowrap">
+                                                <th>
+                                                    <select class="column-filter" data-column="0">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Sl.No"-->
+<!--                                                    data-column="0"-->
+<!--                                                  />-->
+                                                </th>
+                                                <th>
+                                                    <select class="column-filter" data-column="1">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="AIT"-->
+<!--                                                    data-column="1"-->
+<!--                                                  />-->
+                                                </th>
+                                                <th>
+                                                    <select class="column-filter" data-column="2">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Portfolio"-->
+<!--                                                    data-column="2"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="3">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Application Name"-->
+<!--                                                    data-column="3"-->
+<!--                                                  />-->
+                                                </th>
+                                                <th>
+                                                    <select class="column-filter" data-column="4">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Automation Status"-->
+<!--                                                    data-column="4"-->
+<!--                                                  />-->
+                                                </th>
+                                                <th>
+                                                    <select class="column-filter" data-column="5">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Automation Tool"-->
+<!--                                                    data-column="5"-->
+<!--                                                  />-->
+                                                </th>
+                                                <th>
+                                                    <select class="column-filter" data-column="6">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Cloud/NonCloud"-->
+<!--                                                    data-column="6"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="7">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="In Sprint"-->
+<!--                                                    data-column="7"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="8">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Litmus Onboarding"-->
+<!--                                                    data-column="8"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="9">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Total # Regression Test Cases"-->
+<!--                                                    data-column="9"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="10">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Total # Regression Automatable"-->
+<!--                                                    data-column="10"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="11">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Total # Regression Automated"-->
+<!--                                                    data-column="11"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="12">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Automation Progress %"-->
+<!--                                                    data-column="12"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="13">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Automation Penetration %"-->
+<!--                                                    data-column="13"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="14">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Time To Manually Execute"-->
+<!--                                                    data-column="14"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="15">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="No Of Release"-->
+<!--                                                    data-column="15"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="16">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Monthly Manual Execution Time"-->
+<!--                                                    data-column="16"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="17">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Monthly Effort Spent On Dev Automation"-->
+<!--                                                    data-column="17"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="18">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Time To Execute One Automated Test Case"-->
+<!--                                                    data-column="18"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="19">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Monthly Automate Execution Time"-->
+<!--                                                    data-column="19"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="20">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Monthly Effort Spent In Maintaining Automation"-->
+<!--                                                    data-column="20"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="21">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Monthly Effort Taken To Execute Regression Script"-->
+<!--                                                    data-column="21"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="22">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Hours Saved Monthly"-->
+<!--                                                    data-column="22"-->
+<!--                                                  />-->
+                                                </th>
+												<th>
+                                                    <select class="column-filter" data-column="23">
+                                                      <option value="all">All</option>
+                                                    </select>
+<!--                                                  <input type="text"-->
+<!--                                                    class="form-control border-0 shadow-none column-search"-->
+<!--                                                    placeholder=""-->
+<!--                                                    aria-label=""-->
+<!--                                                    name="Comments"-->
+<!--                                                    data-column="23"-->
+<!--                                                  />-->
+                                                </th>
                                         </tr>
                                     </thead>
 									{% for obj in object_list %}
