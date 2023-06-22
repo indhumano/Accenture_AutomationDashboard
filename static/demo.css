@@ -129,6 +129,7 @@ padding-left: 10px!important; font-size:20px;}
 }
 .table-custom tr td{font-size:12px;}
 .table-custom tr th{text-transform: capitalize;}
+.table-custom tr th select.column-filter{min-width:60px;}
 @media (min-width: 992px){
 .col-lg-3ow .col-lg-3 {
     width: 20%;
