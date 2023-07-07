@@ -7,14 +7,48 @@ from django.db.models import Avg, Sum
 from django.urls import reverse
 import pandas as pd
 from django.db import transaction
+from django.views import View
+from django.contrib.auth import authenticate, login, logout
+from django.template import loader
+from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 def home(request):
     return redirect('Dashboard')
 
+
+class LoginView(View):
+    template_name = 'dashboard-login.html'
+
+    def get(self, request):
+        template = loader.get_template(self.template_name)
+        context = {'redirection_url': request.GET.get('next')}
+        return HttpResponse(template.render(context, request))
+
+    def post(self, request):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            redirection_url = request.POST.get('redirection_url')
+            redirection_url = None if redirection_url == 'None' else redirection_url
+            if redirection_url is not None:
+                return HttpResponseRedirect(redirection_url)
+            else:
+                return HttpResponseRedirect(reverse('Dashboard'))
+        else:
+            return self.get(request)
+
+
 class index(generic.ListView):
     model = automation_db
     template_name = 'Index.html'
+    login_url = '/login/'
+
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(index, self).get_context_data(**kwargs)
@@ -116,3 +150,7 @@ def upload_excel(request):
                 print(object.serialnumber)
 
         return HttpResponseRedirect(reverse('Index'))
+
+def log_out(request):
+    logout(request)
+    return redirect('login')
