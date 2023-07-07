@@ -490,12 +490,21 @@
 
   // Income Chart - Area chart
   // --------------------------------------------------------------------
-  const incomeChartEl = document.querySelector('#incomeChart'),
+ const incomeChartEl = document.querySelector('#incomeChart'),
     incomeChartConfig = {
-      series: [
-        {
-          data: [24, 21, 30, 22, 42, 26, 35, 29]
-        }
+        series: [
+            {
+                name: 'Regression Test Cases',
+                data: [205, 346, 527, 190, 412, 260, 685, 562]
+            },
+         {
+              name: 'Regression Automatable',
+          data: [70, 156, 203, 53, 260, 136, 287, 130]
+            },
+            {
+                name: 'Regression Automated',
+                data: [135, 190, 324, 137, 152, 124, 398, 432]
+            }
       ],
       chart: {
         height: 215,
@@ -514,7 +523,7 @@
         curve: 'smooth'
       },
       legend: {
-        show: false
+        show: true
       },
       markers: {
         size: 6,
@@ -536,7 +545,7 @@
           size: 7
         }
       },
-      colors: [config.colors.primary],
+        colors: [config.colors.primary, config.colors.info, config.colors.warning],
       fill: {
         type: 'gradient',
         gradient: {
@@ -560,10 +569,10 @@
       xaxis: {
         categories: ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
         axisBorder: {
-          show: false
+          show: true
         },
         axisTicks: {
-          show: false
+          show: true
         },
         labels: {
           show: true,
@@ -575,10 +584,10 @@
       },
       yaxis: {
         labels: {
-          show: false
+          show: true
         },
         min: 10,
-        max: 50,
+        max: 1000,
         tickAmount: 4
       }
     };
