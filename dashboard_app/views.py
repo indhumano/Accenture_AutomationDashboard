@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from .forms import Insert_automation_data
 from django.views import generic
 from .models import automation_db
@@ -154,3 +154,50 @@ def upload_excel(request):
 def log_out(request):
     logout(request)
     return redirect('login')
+
+def get_graph_data(request):
+    year = 2023
+    reg_test_cases = automation_db.objects.filter(year=year).values('month').annotate(sum=Sum('no_of_overall_regression_scripts'))
+    reg_automatable = automation_db.objects.filter(year=year).values('month').annotate(sum=Sum('no_of_inscope_reg_scripts'))
+    reg_automated = automation_db.objects.filter(year=year).values('month').annotate(sum=Sum('no_of_regscripts_automated'))
+
+    test_cases = []
+    automatable = []
+    automated = []
+    for t in reg_test_cases:
+        test_cases.append(t)
+
+    for amble in reg_automatable:
+        automatable.append(amble)
+
+    for amted in reg_automated:
+        automated.append(amted)
+
+    month_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    m_order = {key: i for i, key in enumerate(month_order)}
+    test_cases_ordered = sorted(test_cases, key=lambda d: m_order[d['month']])
+    automatable_ordered = sorted(automatable, key=lambda d: m_order[d['month']])
+    automated_ordered = sorted(automated, key=lambda d: m_order[d['month']])
+
+    reg_test_cases_data = [tco['sum'] for tco in test_cases_ordered]
+    reg_automatable_data = [ao['sum'] for ao in automatable_ordered]
+    reg_automated_data = [ato['sum'] for ato in automated_ordered]
+
+    series = []
+    reg_test_cases_dict = {}
+    reg_test_cases_dict['name'] = "Regression Test Cases"
+    reg_test_cases_dict['data'] = reg_test_cases_data
+    series.append(reg_test_cases_dict)
+
+    reg_automatable_dict = {}
+    reg_automatable_dict['name'] = "Regression Automatable"
+    reg_automatable_dict['data'] = reg_automatable_data
+    series.append(reg_automatable_dict)
+
+    reg_automated_dict = {}
+    reg_automated_dict['name'] = "Regression Automated"
+    reg_automated_dict['data'] = reg_automated_data
+    series.append(reg_automated_dict)
+
+    response = series
+    return JsonResponse(response, safe=False)
