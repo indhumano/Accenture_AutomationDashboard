@@ -488,113 +488,103 @@
     statisticsChart.render();
   }
 
-  // Income Chart - Area chart
-  // --------------------------------------------------------------------
- const incomeChartEl = document.querySelector('#incomeChart'),
-    incomeChartConfig = {
-        series: [
-            {
-                name: 'Regression Test Cases',
-                data: [205, 346, 527, 190, 412, 260, 685, 562]
+  $.get("http://127.0.0.1:8000/get_graph_data/", function(data, status){
+      // Income Chart - Area chart
+      // --------------------------------------------------------------------
+     const incomeChartEl = document.querySelector('#incomeChart'),
+        incomeChartConfig = {
+            series: data,
+          chart: {
+            height: 215,
+            parentHeightOffset: 0,
+            parentWidthOffset: 0,
+            toolbar: {
+              show: false
             },
-         {
-              name: 'Regression Automatable',
-          data: [70, 156, 203, 53, 260, 136, 287, 130]
-            },
-            {
-                name: 'Regression Automated',
-                data: [135, 190, 324, 137, 152, 124, 398, 432]
-            }
-      ],
-      chart: {
-        height: 215,
-        parentHeightOffset: 0,
-        parentWidthOffset: 0,
-        toolbar: {
-          show: false
-        },
-        type: 'area'
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        width: 2,
-        curve: 'smooth'
-      },
-      legend: {
-        show: true
-      },
-      markers: {
-        size: 6,
-        colors: 'transparent',
-        strokeColors: 'transparent',
-        strokeWidth: 4,
-        discrete: [
-          {
-            fillColor: config.colors.white,
-            seriesIndex: 0,
-            dataPointIndex: 7,
-            strokeColor: config.colors.primary,
-            strokeWidth: 2,
+            type: 'area'
+          },
+          dataLabels: {
+            enabled: false
+          },
+          stroke: {
+            width: 2,
+            curve: 'smooth'
+          },
+          legend: {
+            show: true
+          },
+          markers: {
             size: 6,
-            radius: 8
+            colors: 'transparent',
+            strokeColors: 'transparent',
+            strokeWidth: 4,
+            discrete: [
+              {
+                fillColor: config.colors.white,
+                seriesIndex: 0,
+                dataPointIndex: 7,
+                strokeColor: config.colors.primary,
+                strokeWidth: 2,
+                size: 6,
+                radius: 8
+              }
+            ],
+            hover: {
+              size: 7
+            }
+          },
+            colors: [config.colors.primary, config.colors.info, config.colors.warning],
+          fill: {
+            type: 'gradient',
+            gradient: {
+              shade: shadeColor,
+              shadeIntensity: 0.6,
+              opacityFrom: 0.5,
+              opacityTo: 0.25,
+              stops: [0, 95, 100]
+            }
+          },
+          grid: {
+            borderColor: borderColor,
+            strokeDashArray: 3,
+            padding: {
+              top: -20,
+              bottom: -8,
+              left: -10,
+              right: 8
+            }
+          },
+          xaxis: {
+            categories: ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+            axisBorder: {
+              show: true
+            },
+            axisTicks: {
+              show: true
+            },
+            labels: {
+              show: true,
+              style: {
+                fontSize: '13px',
+                colors: axisColor
+              }
+            }
+          },
+          yaxis: {
+            labels: {
+              show: true
+            },
+            min: 10,
+            max: 1000,
+            tickAmount: 4
           }
-        ],
-        hover: {
-          size: 7
-        }
-      },
-        colors: [config.colors.primary, config.colors.info, config.colors.warning],
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shade: shadeColor,
-          shadeIntensity: 0.6,
-          opacityFrom: 0.5,
-          opacityTo: 0.25,
-          stops: [0, 95, 100]
-        }
-      },
-      grid: {
-        borderColor: borderColor,
-        strokeDashArray: 3,
-        padding: {
-          top: -20,
-          bottom: -8,
-          left: -10,
-          right: 8
-        }
-      },
-      xaxis: {
-        categories: ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-        axisBorder: {
-          show: true
-        },
-        axisTicks: {
-          show: true
-        },
-        labels: {
-          show: true,
-          style: {
-            fontSize: '13px',
-            colors: axisColor
-          }
-        }
-      },
-      yaxis: {
-        labels: {
-          show: true
-        },
-        min: 10,
-        max: 1000,
-        tickAmount: 4
+        };
+      if (typeof incomeChartEl !== undefined && incomeChartEl !== null) {
+        const incomeChart = new ApexCharts(incomeChartEl, incomeChartConfig);
+        incomeChart.render();
       }
-    };
-  if (typeof incomeChartEl !== undefined && incomeChartEl !== null) {
-    const incomeChart = new ApexCharts(incomeChartEl, incomeChartConfig);
-    incomeChart.render();
-  }
+
+  });
 
   // Expenses Mini Chart - Radial Chart
   // --------------------------------------------------------------------
