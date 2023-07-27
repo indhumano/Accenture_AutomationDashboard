@@ -61,6 +61,20 @@
     <script src="{% static 'assets/js/config.js' %}"></script>
     <script>
         $(document).ready(function() {
+          // searches table columns based on search term
+              $("#search").keyup(function(e) {
+                // only fires when the focus is on the search box
+                var searchValue = $("#search").val().toLowerCase();
+                $('#data tbody tr').filter(function(){
+                  $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1)
+                });
+                if (searchValue == ""){
+                   $(".column-filter.form-select.form-select-sm").each(function(){
+                        $(this).prop("selectedIndex", 0);
+                   });
+                }
+              });
+
           // Populate the dropdowns with unique values from corresponding columns
           populateDropdowns();
 
