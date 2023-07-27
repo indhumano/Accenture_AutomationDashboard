@@ -430,7 +430,7 @@
                         <span class="align-middle">My Profile</span>
                       </a>
                     </li>
-                    {% if user.is_admin %}
+                    {% if user.is_superuser %}
                     <li>
                       <a class="dropdown-item" href="{% url 'Insert_automation_data' %}">
                         <i class="bx bx-user me-2"></i>
