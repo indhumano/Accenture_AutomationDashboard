@@ -487,8 +487,38 @@
     const statisticsChart = new ApexCharts(chartOrderStatistics, orderChartConfig);
     statisticsChart.render();
   }
+function getUniqueValues() {
+          var uniqueValues = [];
 
-  $.get("http://127.0.0.1:8000/get_graph_data/", function(data, status){
+          $('#data tbody tr').each(function() {
+            var cellText = $(this).attr("data-year");
+            if (cellText && !uniqueValues.includes(cellText)) {
+              uniqueValues.push(cellText);
+            }
+          });
+
+           var dropdown = $("#graphyearselect");
+            dropdown.empty();
+            dropdown.append($('<option>').val('').text('Select Year'));
+            uniqueValues.forEach(function(value) {
+            dropdown.append($('<option>').val(value).text(value));
+        //  return uniqueValues;
+        });
+
+    return $(uniqueValues).last()[0]
+        }
+$('#graphyearselect').on('change keyup', function() {
+ var selectyear=$(this).val();
+$("#incomeChart").empty();
+getGraphData(selectyear);
+});
+getGraphData(getUniqueValues())
+function getGraphData(year){
+$("#lblGraphYear").text(year);
+//debugger
+  $.get("http://127.0.0.1:8000/get_graph_data",{ TAyear: year }, function(data, status){
+
+  //debugger
       // Income Chart - Area chart
       // --------------------------------------------------------------------
      const incomeChartEl = document.querySelector('#incomeChart'),
@@ -585,7 +615,7 @@
       }
 
   });
-
+}
   // Expenses Mini Chart - Radial Chart
   // --------------------------------------------------------------------
   const weeklyExpensesEl = document.querySelector('#expensesOfWeek'),

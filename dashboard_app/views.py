@@ -156,7 +156,7 @@ def log_out(request):
     return redirect('login')
 
 def get_graph_data(request):
-    year = 2023
+    year = request.GET["TAyear"]
     reg_test_cases = automation_db.objects.filter(year=year).values('month').annotate(sum=Sum('no_of_overall_regression_scripts'))
     reg_automatable = automation_db.objects.filter(year=year).values('month').annotate(sum=Sum('no_of_inscope_reg_scripts'))
     reg_automated = automation_db.objects.filter(year=year).values('month').annotate(sum=Sum('no_of_regscripts_automated'))

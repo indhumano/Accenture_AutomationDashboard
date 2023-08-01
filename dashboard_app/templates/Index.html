@@ -61,6 +61,7 @@
     <script src="{% static 'assets/js/config.js' %}"></script>
     <script>
         $(document).ready(function() {
+
           // searches table columns based on search term
               $("#search").keyup(function(e) {
                 // only fires when the focus is on the search box
@@ -103,6 +104,7 @@
                 }
               }
               $(this).toggle(rowVisible);
+
             });
 
             var visibleColumnValues = getColumnValues();
@@ -222,9 +224,23 @@
 
           columnValues.push(rowValues);
         });
-
         return columnValues;
         }
+function html2json() {
+   var json = '{';
+   var otArr = [];
+   var tbl2 = $('#data tbody tr:visible').each(function(i) {
+      x = $(this).children();
+      var itArr = [];
+      x.each(function() {
+         itArr.push('"' + $(this).text() + '"');
+      });
+      otArr.push('"' + i + '": [' + itArr.join(',') + ']');
+   })
+   json += otArr.join(",") + '}'
+   alert(json);
+   return json;
+}
 
     </script>
       <style>
@@ -1004,11 +1020,13 @@
 <!--                                                    data-column="23"-->
 <!--                                                  />-->
                                                 </th>
+
                                         </tr>
                                     </thead>
+
 									{% for obj in object_list %}
                                     <tbody>
-                                        <tr>
+                                        <tr data-year="{{ obj.year }}">
                                                 <td>{{ obj.serialnumber }}</td>
                                                 <td>{{ obj.AIT_Number }}</td>
                                                 <td>{{ obj.portfolio }}</td>
@@ -1033,6 +1051,7 @@
 												<td>{{ obj.monthly_effort_takes_toexecute_regscript }}</td>
 												<td>{{ obj.hours_saved_monthly }}</td>
 												<td>{{ obj.comments }}</td>
+
                                         </tr>
 									</tbody>
 									{% endfor %}
@@ -1047,13 +1066,20 @@
                   <div class="card h-100">
                     <div class="card-header">
                     <h5 class="card-header m-0 me-2 pb-3">Automation Dashboard Chart View</h5>
+                        <div class="col-md-2">
+                             Select Year :  <select id="graphyearselect" class="form-select form-select-sm">
+
+                                                    </select>
+
+
+                        </div>
                     </div>
                     <div class="card-body px-0">
                       <div class="tab-content p-0">
                         <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel">
 
                           <div id="incomeChart"></div>
-
+ <p class="txt-center">Year: <span id="lblGraphYear"></span></p>
                         </div>
                       </div>
                     </div>
