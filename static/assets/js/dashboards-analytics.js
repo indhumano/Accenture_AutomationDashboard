@@ -585,7 +585,7 @@ $("#lblGraphYear").text(year);
             }
           },
           xaxis: {
-            categories: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+            categories: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul','Aug','Sep','Oct','Nov','Dec'],
             axisBorder: {
               show: true
             },
