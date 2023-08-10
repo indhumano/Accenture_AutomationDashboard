@@ -517,8 +517,10 @@ function getGraphData(year){
 $("#lblGraphYear").text(year);
 //debugger
   $.get("http://127.0.0.1:8000/get_graph_data",{ TAyear: year }, function(data, status){
-
-  //debugger
+var largestValues = [];
+$(data).each(function (i,j) {
+     largestValues =$.merge(largestValues,j.data);
+});
       // Income Chart - Area chart
       // --------------------------------------------------------------------
      const incomeChartEl = document.querySelector('#incomeChart'),
@@ -604,8 +606,8 @@ $("#lblGraphYear").text(year);
             labels: {
               show: true
             },
-            min: 10,
-            max: 1000,
+            min: Math.min.apply(Math,largestValues),
+            max:Math.max.apply(Math,largestValues) ,
             tickAmount: 4
           }
         };
