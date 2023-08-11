@@ -152,7 +152,7 @@ padding-left: 10px!important; font-size:20px;}
 .cardstyle .card ,.cardstyle .card h3{color:#fff;}
 .cardstyle .d-flex{display:none!important}
 .cardstyle .card{border:6px #fff double}
-.cardstyle .card::before {
+.cardstyle .cardA::before,.cardstyle .cardB::before,.cardstyle .cardC::before,.cardstyle .cardD::before,.cardstyle .cardE::before {
  content: ">";
     color: #a39898;
     position: absolute;
