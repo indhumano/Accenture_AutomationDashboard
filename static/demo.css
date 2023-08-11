@@ -161,4 +161,4 @@ padding-left: 10px!important; font-size:20px;}
     top: -163px;
     left: -7px;
 }
-.cardstyle .col-lg-3ow .card-body{min-height: 145px;padding-top: 1.8em;}
+.cardstyle .col-lg-3ow .card-body{min-height: 145px;padding-top: 1.8em;position:relative;z-index:1}
