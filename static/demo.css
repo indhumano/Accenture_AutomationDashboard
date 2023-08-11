@@ -149,7 +149,7 @@ padding-left: 10px!important; font-size:20px;}
 .cardstyle .cardC{background:#6e016b!important;}
 .cardstyle .cardD{background:#016e6e!important;}
 .cardstyle .cardE{background:#6e0101!important;}
-.cardstyle .card ,.cardstyle .card h3{color:#fff;}
+.cardstyle .card .d-block.mb-1 ,.cardstyle .card h3{color:#fff;}
 .cardstyle .d-flex{display:none!important}
 .cardstyle .card{border:6px #fff double}
 .cardstyle .cardA::before,.cardstyle .cardB::before,.cardstyle .cardC::before,.cardstyle .cardD::before,.cardstyle .cardE::before {
