@@ -156,9 +156,12 @@ padding-left: 10px!important; font-size:20px;}
  content: ">";
     color: #a39898;
     position: absolute;
-    font-size: 20em;
+    font-size: 18em;
     opacity: .25;
-    top: -163px;
-    left: -7px;
+    top: -153px;
+    left: -3px;
 }
-.cardstyle .col-lg-3ow .card-body{min-height: 145px;padding-top: 1.8em;position:relative;z-index:1}
+.cardstyle .col-lg-3ow .card-body{
+min-height: 115px;
+position:relative;z-index:1
+}
