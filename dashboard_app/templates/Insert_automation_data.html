@@ -15,12 +15,12 @@
           </div>
           <form class="form-horizontal" method="post" action="{% url 'Insert_automation_data' %}">
               {% csrf_token %}
-            <div class="form-group row mb-3">
-              <label for="Serialnumber" class="control-label col-lg-4">Serial Number :</label>
-              <div class="col-lg-8">
-                <input id="Serialnumber" name="serialnumber" type="number" class="form-control" required/>
-              </div>
-            </div>
+<!--            <div class="form-group row mb-3">-->
+<!--              <label for="Serialnumber" class="control-label col-lg-4">Serial Number :</label>-->
+<!--              <div class="col-lg-8">-->
+<!--                <input id="Serialnumber" name="serialnumber" type="number" class="form-control" required/>-->
+<!--              </div>-->
+<!--            </div>-->
             <div class="form-group row mb-3">
               <label for="month" class="control-label col-lg-4">Month :</label>
               <div class="col-lg-8">
@@ -130,20 +130,20 @@
                 <input id="no_of_regscripts_automated" name="no_of_regscripts_automated" type="number"  min="0" value="0" step="any" class="form-control" required/>
               </div>
             </div>
+<!--            <div class="form-group row mb-3">-->
+<!--              <label for="Percentage_Automation_Complete" class="control-label col-lg-4">Percentage Automation Complete :</label>-->
+<!--              <div class="col-lg-8">-->
+<!--                <input id="Percentage_Automation_Complete" name="percentage_automation_complete" type="number"  min="0" value="0" step="any" class="form-control" required/>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="form-group row mb-3">-->
+<!--              <label for="Percentage_Application_Penetration" class="control-label col-lg-4">Percentage Application Penetration :</label>-->
+<!--              <div class="col-lg-8">-->
+<!--                <input id="Percentage_Application_Penetration" name="percentage_application_penetration" type="number"  min="0" value="0" step="any" class="form-control" required/>-->
+<!--              </div>-->
+<!--            </div>-->
             <div class="form-group row mb-3">
-              <label for="Percentage_Automation_Complete" class="control-label col-lg-4">Percentage Automation Complete :</label>
-              <div class="col-lg-8">
-                <input id="Percentage_Automation_Complete" name="percentage_automation_complete" type="number"  min="0" value="0" step="any" class="form-control" required/>
-              </div>
-            </div>
-            <div class="form-group row mb-3">
-              <label for="Percentage_Application_Penetration" class="control-label col-lg-4">Percentage Application Penetration :</label>
-              <div class="col-lg-8">
-                <input id="Percentage_Application_Penetration" name="percentage_application_penetration" type="number"  min="0" value="0" step="any" class="form-control" required/>
-              </div>
-            </div>
-            <div class="form-group row mb-3">
-              <label for="time_to_manuallyexecute" class="control-label col-lg-4">Time to Manually Execute :</label>
+              <label for="time_to_manuallyexecute" class="control-label col-lg-4">Time to Manually Execute(in hours) :</label>
               <div class="col-lg-8">
                 <input id="time_to_manuallyexecute" name="time_to_manuallyexecute" type="number"  min="0" value="0" step="any" class="form-control" required/>
               </div>
@@ -155,43 +155,43 @@
               </div>
             </div>
             <div class="form-group row mb-3">
-              <label for="Monthly_Manual_Executiontime" class="control-label col-lg-4">Monthly Manual Execution time :</label>
+              <label for="Monthly_Manual_Executiontime" class="control-label col-lg-4">Monthly Manual Execution time(in hours) :</label>
               <div class="col-lg-8">
                 <input id="Monthly_Manual_Executiontime" name="monthly_manual_executiontime" type="number"  min="0" value="0" step="any" class="form-control" required/>
               </div>
             </div>
             <div class="form-group row mb-3">
-              <label for="Monthly_Effort_Spent_On_Dev_Automation" class="control-label col-lg-4">Monthly Effort Spent on Dev Automation :</label>
+              <label for="Monthly_Effort_Spent_On_Dev_Automation" class="control-label col-lg-4">Monthly Effort Spent on Dev Automation(in hours) :</label>
               <div class="col-lg-8">
                 <input id="Monthly_Effort_Spent_On_Dev_Automation" name="monthly_effort_spent_on_dev_automation" type="number"  min="0" value="0" step="any" class="form-control" required/>
               </div>
             </div>
             <div class="form-group row mb-3">
-              <label for="Time_To_Execute_1automatedtestcase" class="control-label col-lg-4">Time to Execute 1 Automated Test Case :</label>
+              <label for="Time_To_Execute_1automatedtestcase" class="control-label col-lg-4">Time to Execute 1 Automated Test Case(in hours) :</label>
               <div class="col-lg-8">
                 <input id="Time_To_Execute_1automatedtestcase" name="time_to_execute_1automatedtestcase" type="number"  min="0" value="0" step="any" class="form-control" required/>
               </div>
             </div>
             <div class="form-group row mb-3">
-              <label for="Mothly_Automate_Executiontime" class="control-label col-lg-4">Monthly Automate Execution Time :</label>
+              <label for="Mothly_Automate_Executiontime" class="control-label col-lg-4">Monthly Automate Execution Time(in hours) :</label>
               <div class="col-lg-8">
                 <input id="Mothly_Automate_Executiontime" name="mothly_automate_executiontime" type="number"  min="0" value="0" step="any" class="form-control" required/>
               </div>
             </div>
             <div class="form-group row mb-3">
-              <label for="Monthly_Effort_Spent_in_Maintaining_Automation" class="control-label col-lg-4">Monthly Effort Spent in Maintaining Automation :</label>
+              <label for="Monthly_Effort_Spent_in_Maintaining_Automation" class="control-label col-lg-4">Monthly Effort Spent in Maintaining Automation(in hours) :</label>
               <div class="col-lg-8">
                 <input id="Monthly_Effort_Spent_in_Maintaining_Automation" name="monthly_effort_spentin_maintaining_automation" type="number"  min="0" value="0" step="any" class="form-control" required/>
               </div>
             </div>
             <div class="form-group row mb-3">
-              <label for="Monthly_Effort_Takes_Toexecute_Regscript" class="control-label col-lg-4">Monthly Effort Takes To execute Regscript :</label>
+              <label for="Monthly_Effort_Takes_Toexecute_Regscript" class="control-label col-lg-4">Monthly Effort Takes To execute Regscript(in hours) :</label>
               <div class="col-lg-8">
                 <input id="Monthly_Effort_Takes_Toexecute_Regscript" name="monthly_effort_takes_toexecute_regscript" type="number"  min="0" value="0" step="any" class="form-control" required/>
               </div>
             </div>
             <div class="form-group row mb-3">
-              <label for="Hours_Saved_Monthly" class="control-label col-lg-4">Monthly Effort Taken to execute Regscript :</label>
+              <label for="Hours_Saved_Monthly" class="control-label col-lg-4">Monthly Hours Saved :</label>
               <div class="col-lg-8">
                 <input id="Hours_Saved_Monthly" name="hours_saved_monthly" type="number"  min="0" value="0" step="any" class="form-control" required/>
               </div>

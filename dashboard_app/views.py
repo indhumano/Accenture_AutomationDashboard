@@ -11,6 +11,7 @@ from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.template import loader
 from django.http import HttpResponse
+from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
@@ -77,7 +78,18 @@ def Insert_automation_data_view(request):
     if "GET" == request.method:
         return render(request, 'Insert_automation_data.html')
     else:
-        form = Insert_automation_data(request.POST)
+        updated_request = request.POST.copy()
+        serial_number = automation_db.objects.latest('pk').pk
+        serial_number += 1
+        no_of_regscripts_automated = int(updated_request.get('no_of_regscripts_automated'))
+        no_of_overall_regression_scripts = int(updated_request.get('no_of_overall_regression_scripts'))
+        no_of_inscope_reg_scripts = int(updated_request.get('no_of_inscope_reg_scripts'))
+        percentage_automation_complete = str(round((no_of_regscripts_automated/no_of_overall_regression_scripts)*100))
+        percentage_application_penetration = str(round((no_of_regscripts_automated/no_of_inscope_reg_scripts)*100))
+        updated_request.update({'percentage_automation_complete': percentage_automation_complete})
+        updated_request.update({'percentage_application_penetration': percentage_application_penetration})
+        updated_request.update({'serialnumber': serial_number})
+        form = Insert_automation_data(updated_request)
         if form.is_valid():
             new_automation_entry = form.save()
             return render(request, 'Insert_automation_data.html', {'message': 'New Entry Done successfully'})
@@ -156,7 +168,8 @@ def log_out(request):
     return redirect('login')
 
 def get_graph_data(request):
-    year = request.GET["TAyear"]
+    current_year = datetime.now().date().strftime("%Y")
+    year = request.GET.get("TAyear", current_year)
     reg_test_cases = automation_db.objects.filter(year=year).values('month').annotate(sum=Sum('no_of_overall_regression_scripts'))
     reg_automatable = automation_db.objects.filter(year=year).values('month').annotate(sum=Sum('no_of_inscope_reg_scripts'))
     reg_automated = automation_db.objects.filter(year=year).values('month').annotate(sum=Sum('no_of_regscripts_automated'))
