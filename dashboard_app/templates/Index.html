@@ -61,6 +61,101 @@
     <script src="{% static 'assets/js/config.js' %}"></script>
     <script>
         $(document).ready(function() {
+
+            // Monthly Manual Execution Time
+            $('#No_Of_Overall_Regression_Scripts,#time_to_manuallyexecute,#No_Of_Release').on('input', function() {
+              var no_of_overall_regression_scripts = $('#No_Of_Overall_Regression_Scripts').val();
+              var time_to_manually_execute = $('#time_to_manuallyexecute').val();
+              var no_of_release = $('#No_Of_Release').val();
+
+              if (no_of_overall_regression_scripts == ""){
+                    no_of_overall_regression_scripts = 0;
+              }
+
+              if (time_to_manually_execute == ""){
+                    time_to_manually_execute = 0;
+              }
+
+              if (no_of_release == ""){
+                    no_of_release = 0;
+              }
+              var monthly_manual_execution_time = no_of_overall_regression_scripts * time_to_manually_execute * no_of_release;
+
+              $('#Monthly_Manual_Executiontime').val(monthly_manual_execution_time);
+            });
+
+            // Monthly Automated Execution Time & Monthly Effort Takes To execute Regscript
+            $('#no_of_regscripts_automated,#No_Of_Release,#Time_To_Execute_1automatedtestcase').on('input', function() {
+              var no_of_regscripts_automated = $('#no_of_regscripts_automated').val();
+              var no_of_release = $('#No_Of_Release').val();
+              var time_to_execute_single_automated_test_case = $('#Time_To_Execute_1automatedtestcase').val();
+
+              if (no_of_regscripts_automated == ""){
+                    no_of_regscripts_automated = 0;
+              }
+
+              if (no_of_release == ""){
+                    no_of_release = 0;
+              }
+
+              if (time_to_execute_single_automated_test_case == ""){
+                    time_to_execute_single_automated_test_case = 0;
+              }
+
+              var monthly_automated_execution_time = no_of_regscripts_automated * no_of_release * time_to_execute_single_automated_test_case;
+
+              var no_of_overall_regression_scripts = $('#No_Of_Overall_Regression_Scripts').val();
+              var time_to_manually_execute = $('#time_to_manuallyexecute').val();
+              var monthly_automate_execution_time = $('#Mothly_Automate_Executiontime').val();
+
+              if (no_of_overall_regression_scripts == ""){
+                    no_of_overall_regression_scripts = 0;
+              }
+
+              if (time_to_manually_execute == ""){
+                    time_to_manually_execute = 0;
+              }
+
+              if (monthly_automate_execution_time == ""){
+                    monthly_automate_execution_time = 0;
+              }
+
+              var monthly_effort_taken_to_execute_regscript = ((no_of_overall_regression_scripts-no_of_regscripts_automated)*time_to_manually_execute*no_of_release)+monthly_automated_execution_time;
+
+              console.log("monthly_effort_taken_to_execute_regscript: " + monthly_effort_taken_to_execute_regscript);
+              $('#Mothly_Automate_Executiontime').val(monthly_automated_execution_time);
+              $('#Monthly_Effort_Takes_Toexecute_Regscript').val(monthly_effort_taken_to_execute_regscript);
+            });
+
+            // Hours saved Monthly
+            $('#Monthly_Effort_Spent_On_Dev_Automation,#Monthly_Effort_Spent_in_Maintaining_Automation').on('input', function() {
+              var monthly_manual_execution_time = $('#Monthly_Manual_Executiontime').val();
+              var monthly_effort_to_execute_regscript = $('#Monthly_Effort_Takes_Toexecute_Regscript').val();
+              var monthly_effort_spent_on_dev_automation = $('#Monthly_Effort_Spent_On_Dev_Automation').val();
+              var monthly_effort_spent_on_maintaining_automation = $('#Monthly_Effort_Spent_in_Maintaining_Automation').val();
+
+              if (monthly_manual_execution_time == ""){
+                    monthly_manual_execution_time = 0;
+              }
+
+              if (monthly_effort_to_execute_regscript == ""){
+                    monthly_effort_to_execute_regscript = 0;
+              }
+
+              if (monthly_effort_spent_on_dev_automation == ""){
+                    monthly_effort_spent_on_dev_automation = 0;
+              }
+
+              if (monthly_effort_spent_on_maintaining_automation == ""){
+                    monthly_effort_spent_on_maintaining_automation = 0;
+              }
+
+              var monthly_hours_saved = monthly_manual_execution_time - monthly_effort_to_execute_regscript - monthly_effort_spent_on_dev_automation - monthly_effort_spent_on_maintaining_automation
+              monthly_hours_saved = monthly_hours_saved.toFixed(1)
+
+              $('#Hours_Saved_Monthly').val(monthly_hours_saved);
+            });
+
           // searches table columns based on search term
               $("#search").keyup(function(e) {
                 // only fires when the focus is on the search box
