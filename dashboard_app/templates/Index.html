@@ -62,6 +62,47 @@
     <script>
         $(document).ready(function() {
 
+            // Percentage_Automation_Complete
+            $('#no_of_regscripts_automated,#no_of_inscope_reg_scripts').on('input', function() {
+              var no_of_regscripts_automated = $('#no_of_regscripts_automated').val();
+              var no_of_inscope_reg_scripts = $('#no_of_inscope_reg_scripts').val();
+
+              if (no_of_regscripts_automated == ""){
+                    no_of_regscripts_automated = 0;
+              }
+
+              if (no_of_inscope_reg_scripts == ""){
+                    no_of_inscope_reg_scripts = 0;
+              }
+
+              var percentage_automation_complete = (no_of_regscripts_automated/no_of_inscope_reg_scripts)*100;
+
+              percentage_automation_complete = percentage_automation_complete.toFixed(2);
+              percentage_automation_complete = percentage_automation_complete.replace(/(\.0+|(\.\d+?)0+)$/, '$2');
+              $('#Percentage_Automation_Complete').val(percentage_automation_complete);
+            });
+
+            // Percentage Application Penetration
+            $('#no_of_regscripts_automated,#No_Of_Overall_Regression_Scripts').on('input', function() {
+              var no_of_regscripts_automated = $('#no_of_regscripts_automated').val();
+              var no_of_overall_regression_scripts = $('#No_Of_Overall_Regression_Scripts').val();
+
+              if (no_of_regscripts_automated == ""){
+                    no_of_regscripts_automated = 0;
+              }
+
+              if (no_of_overall_regression_scripts == ""){
+                    no_of_overall_regression_scripts = 0;
+              }
+
+              var percentage_application_penetration = (no_of_regscripts_automated/no_of_overall_regression_scripts)*100;
+
+              percentage_application_penetration = percentage_application_penetration.toFixed(2);
+              percentage_application_penetration = percentage_application_penetration.replace(/(\.0+|(\.\d+?)0+)$/, '$2');
+              $('#Percentage_Application_Penetration').val(percentage_application_penetration);
+            });
+
+
             // Monthly Manual Execution Time
             $('#No_Of_Overall_Regression_Scripts,#time_to_manuallyexecute,#No_Of_Release').on('input', function() {
               var no_of_overall_regression_scripts = $('#No_Of_Overall_Regression_Scripts').val();
@@ -152,6 +193,7 @@
 
               var monthly_hours_saved = monthly_manual_execution_time - monthly_effort_to_execute_regscript - monthly_effort_spent_on_dev_automation - monthly_effort_spent_on_maintaining_automation
               monthly_hours_saved = monthly_hours_saved.toFixed(1)
+              monthly_hours_saved = monthly_hours_saved.replace(/(\.0+|(\.\d+?)0+)$/, '$2');
 
               $('#Hours_Saved_Monthly').val(monthly_hours_saved);
             });

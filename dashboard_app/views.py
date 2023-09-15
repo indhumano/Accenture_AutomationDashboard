@@ -81,13 +81,13 @@ def Insert_automation_data_view(request):
         updated_request = request.POST.copy()
         serial_number = automation_db.objects.latest('pk').pk
         serial_number += 1
-        no_of_regscripts_automated = int(updated_request.get('no_of_regscripts_automated'))
-        no_of_overall_regression_scripts = int(updated_request.get('no_of_overall_regression_scripts'))
-        no_of_inscope_reg_scripts = int(updated_request.get('no_of_inscope_reg_scripts'))
-        percentage_automation_complete = str(round((no_of_regscripts_automated/no_of_overall_regression_scripts)*100))
-        percentage_application_penetration = str(round((no_of_regscripts_automated/no_of_inscope_reg_scripts)*100))
-        updated_request.update({'percentage_automation_complete': percentage_automation_complete})
-        updated_request.update({'percentage_application_penetration': percentage_application_penetration})
+        # no_of_regscripts_automated = int(updated_request.get('no_of_regscripts_automated'))
+        # no_of_overall_regression_scripts = int(updated_request.get('no_of_overall_regression_scripts'))
+        # no_of_inscope_reg_scripts = int(updated_request.get('no_of_inscope_reg_scripts'))
+        # percentage_automation_complete = str(round((no_of_regscripts_automated/no_of_overall_regression_scripts)*100))
+        # percentage_application_penetration = str(round((no_of_regscripts_automated/no_of_inscope_reg_scripts)*100))
+        # updated_request.update({'percentage_automation_complete': percentage_automation_complete})
+        # updated_request.update({'percentage_application_penetration': percentage_application_penetration})
         updated_request.update({'serialnumber': serial_number})
         form = Insert_automation_data(updated_request)
         if form.is_valid():
