@@ -5,13 +5,15 @@
 <div class="content-wrapper"></div>
 {% block content %}
 <!-- Content -->
+ <div class="dashboard-admin-alert"><marquee behavior="alternate" width="50%">{{ message|default:"Please fill the details and click Submit" }}</marquee></div>
     <div class="card">
       <div class="">
         <div class="card-body">
         <div class="insert_data_background">
 <!--            <h3>{{ message }}</h3>-->
           <div class="mb-5">
-            <h2>{{ message|default:"Please fill the details and click Submit" }}</h2>
+         <!--   <h2>{{ message|default:"Please fill the details and click Submit" }}</h2> -->
+
           </div>
           <form class="form-horizontal" method="post" action="{% url 'Insert_automation_data' %}">
               {% csrf_token %}
