@@ -174,3 +174,18 @@ position:relative;z-index:1
     color: #fff;
     box-shadow: 0px 0px 10px #040404 inset;
    }
+   .ul-custom-class{ width:1px;}
+   .search-cbar .bx{position:relative;left:-8px}
+.clear-filter span {
+    cursor: pointer;
+    padding: 7px 7px;
+    border-radius: 5px 5px 0px 0px;
+}
+.clear-filter span img {
+    margin-top: -6px;
+    width: 1.6%;
+    opacity:.8;
+}
+    .clear-filter span:hover img {
+        opacity: 1;
+    }

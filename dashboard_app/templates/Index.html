@@ -362,6 +362,12 @@
         });
         return columnValues;
         }
+        // Clear Filter
+        function ClearFilter() {
+            $(".column-filter").val('All').change();
+            populateDropdowns();           
+        }
+
 function html2json() {
    var json = '{';
    var otArr = [];
@@ -533,7 +539,7 @@ function html2json() {
                       <nav>
                        <div class="navbar-nav-right d-flex d-flexover align-items-center" id="navbar-collapse">
               <!-- Search -->
-                  <div class="navbar-nav align-items-center">
+                  <div class="navbar-nav align-items-center search-cbar">
                     <div class="nav-item d-flex align-items-center">
                       <i class="bx bx-search fs-4 lh-0"></i>
                       <input id="search"
@@ -548,7 +554,7 @@ function html2json() {
 
               <!--</form> /Search -->
 
-              <ul class="navbar-nav flex-row align-items-center">
+              <ul class="navbar-nav flex-row align-items-center ul-custom-class">
                 <!-- Place this tag where you want the button to render. -->
                 <!-- User -->
                 <li class="nav-item navbar-dropdown dropdown-user dropdown db-profile">
@@ -670,7 +676,7 @@ function html2json() {
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-12 col-3 mb-3">
-                                <div class="card cardB">
+                                <div class="card cardA">
                                     <div class="card-body">
                                         <div style="visibility: hidden;" class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
@@ -698,7 +704,7 @@ function html2json() {
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-12 col-3 mb-3">
-                                <div class="card cardC">
+                                <div class="card cardA">
                                     <div class="card-body">
                                         <div style="visibility: hidden;" class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
@@ -727,7 +733,7 @@ function html2json() {
                                 </div>
                             </div>
  <div class="col-lg-3 col-md-12 col-3 mb-3">
-                                <div class="card cardD">
+                                <div class="card cardA">
                                     <div class="card-body">
                                         <div style="visibility: hidden;" class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
@@ -756,7 +762,7 @@ function html2json() {
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-12 col-3 mb-3">
-                                <div class="card cardE">
+                                <div class="card cardA">
                                     <div class="card-body">
                                         <div style="visibility: hidden;" class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
@@ -803,6 +809,7 @@ function html2json() {
                             <i class="menu-icon tf-icons bx bx-table"></i> Automation Dashboard Table
 
                         </button>
+                        
                     </li>
                     <li class="nav-item">
                         <button type="button"
@@ -819,409 +826,411 @@ function html2json() {
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="navs-justified-home" role="tabpanel">
+                        <div class="clear-filter">
 
+                            <span class="bg-label-warning me-1" onclick="ClearFilter()"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAL5JREFUSEtjZKAxYKSx+QwELfjbJ5jBwMg4HatDGP9nMBe8n4nPkXgt+D9B0Obff8Z9DAwMrDgM+c30n9GGsejtKVyWoFjwt1/oPzWCjLnwHdxc+lpADdejm4E1DsgNKuSggVk0AiyAeRs92LCJkxVEoxYQTEWjQTQCgoiUApD4jNYndJWBkUGLFMMZ/jNcYy56p01UafqnXyiEkeF/OwMDowqRltz8z8BQw1L4bg1RFhBpKFHKCFb6RJmCRxEA7q6hGZ8aQhcAAAAASUVORK5CYII=" /> Clear Filter</span>
+                        </div>
+                        <div class="container" hidden>
 
-                            <div class="container" hidden>
-
-                                <form action="{% url 'upload_excel' %}" method="post" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <input type="file"
-                                           title="Upload excel file"
-                                           name="excel_data"
-                                           style="border: 1px solid black; padding: 5px;"
-                                           required="required">
-                                    <p>
+                            <form action="{% url 'upload_excel' %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="file"
+                                       title="Upload excel file"
+                                       name="excel_data"
+                                       style="border: 1px solid black; padding: 5px;"
+                                       required="required">
+                                <p>
                                     <input type="submit"
                                            value="Upload"
                                            style="border: 1px solid green; padding:5px; border-radius: 2px; cursor: pointer;">
-                                </form>
-                            </div>
+                            </form>
+                        </div>
 
-                            <div class="table-responsive text-nowrap addscroll-y">
+                        <div class="table-responsive text-nowrap addscroll-y">
 
                             <table id="data" class="table table-hover table-custom">
-                                    <thead>
-                                        <tr class="text-nowrap">
-                                                <th>Sl.No</th>
-                                                <th>Month</th>
-                                                <th>Year</th>
-                                                <th>AIT</th>
-                                                <th>Portfolio</th>
-												<th>Application Name</th>
-                                                <th>Automation Status</th>
-                                                <th>Automation Tool</th>
-                                                <th>Cloud/NonCloud</th>
-												<th>In Sprint</th>
-												<th>Litmus Onboarding</th>
-												<th>Total # Regression Test Cases</th>
-												<th>Total # Regression Automatable</th>
-												<th>Total # Regression Automated</th>
-												<th>Automation Progress %</th>
-												<th>Automation Penetration %</th>
-												<th>Time to Manually Execute</th>
-												<th>No of Release</th>
-												<th>Monthly Manual Execution Time</th>
-												<th>Monthly Effort Spent on Dev Automation</th>
-												<th>Time to Execute One Automated Test Case</th>
-												<th>Monthly Automate Execution Time</th>
-												<th>Monthly Effort Spent in Maintaining Automation</th>
-												<th>Monthly Effort taken to Execute Regression Script</th>
-												<th>Hours Saved Monthly</th>
-												<th>Comments</th>
-                                        </tr>
-                                        <tr class="text-nowrap">
-                                                <th>
-                                                    <select class="column-filter form-select form-select-sm " data-column="0">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Sl.No"-->
-<!--                                                    data-column="0"-->
-<!--                                                  />-->
-                                                </th>
-                                                <th>
-                                                    <select class="column-filter form-select form-select-sm " data-column="1">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Month"-->
-<!--                                                    data-column="1"-->
-<!--                                                  />-->
-                                                </th>
-                                                <th>
-                                                    <select class="column-filter form-select form-select-sm " data-column="2">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Year"-->
-<!--                                                    data-column="2"-->
-<!--                                                  />-->
-                                                </th>
-                                                <th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="3">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="AIT"-->
-<!--                                                    data-column="3"-->
-<!--                                                  />-->
-                                                </th>
-                                                <th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="4">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Portfolio"-->
-<!--                                                    data-column="4"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="5">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Application Name"-->
-<!--                                                    data-column="5"-->
-<!--                                                  />-->
-                                                </th>
-                                                <th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="6">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Automation Status"-->
-<!--                                                    data-column="6"-->
-<!--                                                  />-->
-                                                </th>
-                                                <th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="7">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Automation Tool"-->
-<!--                                                    data-column="7"-->
-<!--                                                  />-->
-                                                </th>
-                                                <th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="8">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Cloud/NonCloud"-->
-<!--                                                    data-column="8"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="9">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="In Sprint"-->
-<!--                                                    data-column="9"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="10">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Litmus Onboarding"-->
-<!--                                                    data-column="10"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="11">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Total # Regression Test Cases"-->
-<!--                                                    data-column="11"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="12">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Total # Regression Automatable"-->
-<!--                                                    data-column="12"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="13">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Total # Regression Automated"-->
-<!--                                                    data-column="13"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="14">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Automation Progress %"-->
-<!--                                                    data-column="14"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="15">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Automation Penetration %"-->
-<!--                                                    data-column="15"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="16">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Time To Manually Execute"-->
-<!--                                                    data-column="16"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="17">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="No Of Release"-->
-<!--                                                    data-column="17"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="18">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Monthly Manual Execution Time"-->
-<!--                                                    data-column="18"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="19">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Monthly Effort Spent On Dev Automation"-->
-<!--                                                    data-column="19"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="20">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Time To Execute One Automated Test Case"-->
-<!--                                                    data-column="20"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="21">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Monthly Automate Execution Time"-->
-<!--                                                    data-column="21"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="22">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Monthly Effort Spent In Maintaining Automation"-->
-<!--                                                    data-column="22"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="23">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Monthly Effort Taken To Execute Regression Script"-->
-<!--                                                    data-column="23"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="24">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Hours Saved Monthly"-->
-<!--                                                    data-column="24"-->
-<!--                                                  />-->
-                                                </th>
-												<th>
-                                                    <select class="column-filter form-select form-select-sm" data-column="25">
-                                                      <option value="all">All</option>
-                                                    </select>
-<!--                                                  <input type="text"-->
-<!--                                                    class="form-control border-0 shadow-none column-search"-->
-<!--                                                    placeholder=""-->
-<!--                                                    aria-label=""-->
-<!--                                                    name="Comments"-->
-<!--                                                    data-column="25"-->
-<!--                                                  />-->
-                                                </th>
+                                <thead>
+                                    <tr class="text-nowrap">
+                                        <th>Sl.No</th>
+                                        <th>Month</th>
+                                        <th>Year</th>
+                                        <th>AIT</th>
+                                        <th>Portfolio</th>
+                                        <th>Application Name</th>
+                                        <th>Automation Status</th>
+                                        <th>Automation Tool</th>
+                                        <th>Cloud/NonCloud</th>
+                                        <th>In Sprint</th>
+                                        <th>Litmus Onboarding</th>
+                                        <th>Total # Regression Test Cases</th>
+                                        <th>Total # Regression Automatable</th>
+                                        <th>Total # Regression Automated</th>
+                                        <th>Automation Progress %</th>
+                                        <th>Automation Penetration %</th>
+                                        <th>Time to Manually Execute</th>
+                                        <th>No of Release</th>
+                                        <th>Monthly Manual Execution Time</th>
+                                        <th>Monthly Effort Spent on Dev Automation</th>
+                                        <th>Time to Execute One Automated Test Case</th>
+                                        <th>Monthly Automate Execution Time</th>
+                                        <th>Monthly Effort Spent in Maintaining Automation</th>
+                                        <th>Monthly Effort taken to Execute Regression Script</th>
+                                        <th>Hours Saved Monthly</th>
+                                        <th>Comments</th>
+                                    </tr>
+                                    <tr class="text-nowrap">
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm " data-column="0">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Sl.No"-->
+                                            <!--                                                    data-column="0"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm " data-column="1">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Month"-->
+                                            <!--                                                    data-column="1"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm " data-column="2">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Year"-->
+                                            <!--                                                    data-column="2"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="3">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="AIT"-->
+                                            <!--                                                    data-column="3"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="4">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Portfolio"-->
+                                            <!--                                                    data-column="4"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="5">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Application Name"-->
+                                            <!--                                                    data-column="5"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="6">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Automation Status"-->
+                                            <!--                                                    data-column="6"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="7">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Automation Tool"-->
+                                            <!--                                                    data-column="7"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="8">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Cloud/NonCloud"-->
+                                            <!--                                                    data-column="8"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="9">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="In Sprint"-->
+                                            <!--                                                    data-column="9"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="10">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Litmus Onboarding"-->
+                                            <!--                                                    data-column="10"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="11">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Total # Regression Test Cases"-->
+                                            <!--                                                    data-column="11"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="12">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Total # Regression Automatable"-->
+                                            <!--                                                    data-column="12"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="13">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Total # Regression Automated"-->
+                                            <!--                                                    data-column="13"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="14">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Automation Progress %"-->
+                                            <!--                                                    data-column="14"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="15">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Automation Penetration %"-->
+                                            <!--                                                    data-column="15"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="16">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Time To Manually Execute"-->
+                                            <!--                                                    data-column="16"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="17">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="No Of Release"-->
+                                            <!--                                                    data-column="17"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="18">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Monthly Manual Execution Time"-->
+                                            <!--                                                    data-column="18"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="19">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Monthly Effort Spent On Dev Automation"-->
+                                            <!--                                                    data-column="19"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="20">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Time To Execute One Automated Test Case"-->
+                                            <!--                                                    data-column="20"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="21">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Monthly Automate Execution Time"-->
+                                            <!--                                                    data-column="21"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="22">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Monthly Effort Spent In Maintaining Automation"-->
+                                            <!--                                                    data-column="22"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="23">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Monthly Effort Taken To Execute Regression Script"-->
+                                            <!--                                                    data-column="23"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="24">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Hours Saved Monthly"-->
+                                            <!--                                                    data-column="24"-->
+                                            <!--                                                  />-->
+                                        </th>
+                                        <th>
+                                            <select class="column-filter form-select form-select-sm" data-column="25">
+                                                <option value="all">All</option>
+                                            </select>
+                                            <!--                                                  <input type="text"-->
+                                            <!--                                                    class="form-control border-0 shadow-none column-search"-->
+                                            <!--                                                    placeholder=""-->
+                                            <!--                                                    aria-label=""-->
+                                            <!--                                                    name="Comments"-->
+                                            <!--                                                    data-column="25"-->
+                                            <!--                                                  />-->
+                                        </th>
 
-                                        </tr>
-                                    </thead>
+                                    </tr>
+                                </thead>
 
-									{% for obj in object_list %}
-                                    <tbody>
-                                        <tr data-year="{{ obj.year }}">
-                                                <td>{{ obj.serialnumber }}</td>
-                                                <td>{{ obj.month }}</td>
-                                                <td>{{ obj.year }}</td>
-                                                <td>{{ obj.AIT_Number }}</td>
-                                                <td>{{ obj.portfolio }}</td>
-												<td>{{ obj.application_name }}</td>
-												<td>{{ obj.Automation_status }}</td>
-                                                <td>{{ obj.automation_tool }}</td>
-                                                <td>{{ obj.could_noncloud }}</td>
-												<td>{{ obj.in_sprint }}</td>
-												<td>{{ obj.litmus_onboarding }}</td>
-												<td>{{ obj.no_of_overall_regression_scripts }}</td>
-												<td>{{ obj.no_of_inscope_reg_scripts }}</td>
-												<td>{{ obj.no_of_regscripts_automated }}</td>
-												<td>{{ obj.percentage_automation_complete }}</td>
-												<td>{{ obj.percentage_application_penetration }}</td>
-												<td>{{ obj.time_to_manuallyexecute }}</td>
-												<td>{{ obj.no_of_release }}</td>
-												<td>{{ obj.monthly_manual_executiontime }}</td>
-												<td>{{ obj.monthly_effort_spent_on_dev_automation }}</td>
-												<td>{{ obj.time_to_execute_1automatedtestcase }}</td>
-												<td>{{ obj.mothly_automate_executiontime }}</td>
-												<td>{{ obj.monthly_effort_spentin_maintaining_automation }}</td>
-												<td>{{ obj.monthly_effort_takes_toexecute_regscript }}</td>
-												<td>{{ obj.hours_saved_monthly }}</td>
-												<td>{{ obj.comments }}</td>
+                                {% for obj in object_list %}
+                                <tbody>
+                                    <tr data-year="{{ obj.year }}">
+                                        <td>{{ obj.serialnumber }}</td>
+                                        <td>{{ obj.month }}</td>
+                                        <td>{{ obj.year }}</td>
+                                        <td>{{ obj.AIT_Number }}</td>
+                                        <td>{{ obj.portfolio }}</td>
+                                        <td>{{ obj.application_name }}</td>
+                                        <td>{{ obj.Automation_status }}</td>
+                                        <td>{{ obj.automation_tool }}</td>
+                                        <td>{{ obj.could_noncloud }}</td>
+                                        <td>{{ obj.in_sprint }}</td>
+                                        <td>{{ obj.litmus_onboarding }}</td>
+                                        <td>{{ obj.no_of_overall_regression_scripts }}</td>
+                                        <td>{{ obj.no_of_inscope_reg_scripts }}</td>
+                                        <td>{{ obj.no_of_regscripts_automated }}</td>
+                                        <td>{{ obj.percentage_automation_complete }}</td>
+                                        <td>{{ obj.percentage_application_penetration }}</td>
+                                        <td>{{ obj.time_to_manuallyexecute }}</td>
+                                        <td>{{ obj.no_of_release }}</td>
+                                        <td>{{ obj.monthly_manual_executiontime }}</td>
+                                        <td>{{ obj.monthly_effort_spent_on_dev_automation }}</td>
+                                        <td>{{ obj.time_to_execute_1automatedtestcase }}</td>
+                                        <td>{{ obj.mothly_automate_executiontime }}</td>
+                                        <td>{{ obj.monthly_effort_spentin_maintaining_automation }}</td>
+                                        <td>{{ obj.monthly_effort_takes_toexecute_regscript }}</td>
+                                        <td>{{ obj.hours_saved_monthly }}</td>
+                                        <td>{{ obj.comments }}</td>
 
-                                        </tr>
-									</tbody>
-									{% endfor %}
-								</table>
+                                    </tr>
+                                </tbody>
+                                {% endfor %}
+                            </table>
 
-                            </div>
+                        </div>
 
                     </div>
                     <div class="tab-pane fade" id="navs-justified-profile" role="tabpanel">

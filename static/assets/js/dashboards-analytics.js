@@ -504,7 +504,7 @@ function getUniqueValues() {
             dropdown.append($('<option>').val(value).text(value));
         //  return uniqueValues;
         });
-
+    $("#graphyearselect").val($(uniqueValues).last()[0]).change();
     return $(uniqueValues).last()[0]
         }
 $('#graphyearselect').on('change keyup', function() {
