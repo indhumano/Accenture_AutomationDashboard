@@ -121,6 +121,8 @@
                     no_of_release = 0;
               }
               var monthly_manual_execution_time = no_of_overall_regression_scripts * time_to_manually_execute * no_of_release;
+              monthly_manual_execution_time = monthly_manual_execution_time.toFixed(2)
+              monthly_manual_execution_time = monthly_manual_execution_time.replace(/(\.0+|(\.\d+?)0+)$/, '$2');
 
               $('#Monthly_Manual_Executiontime').val(monthly_manual_execution_time);
             });
@@ -192,7 +194,7 @@
               }
 
               var monthly_hours_saved = monthly_manual_execution_time - monthly_effort_to_execute_regscript - monthly_effort_spent_on_dev_automation - monthly_effort_spent_on_maintaining_automation
-              monthly_hours_saved = monthly_hours_saved.toFixed(1)
+              monthly_hours_saved = monthly_hours_saved.toFixed(2)
               monthly_hours_saved = monthly_hours_saved.replace(/(\.0+|(\.\d+?)0+)$/, '$2');
 
               $('#Hours_Saved_Monthly').val(monthly_hours_saved);
