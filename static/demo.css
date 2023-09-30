@@ -189,3 +189,13 @@ position:relative;z-index:1
     .clear-filter span:hover img {
         opacity: 1;
     }
+    .table-custom tbody tr td{
+    overflow-x: auto;
+    text-wrap: nowrap;
+   }
+   td .comment-box{
+    overflow-x: auto;
+    text-wrap: nowrap;
+    width: 350px;
+    min-height: 25px;
+   }
